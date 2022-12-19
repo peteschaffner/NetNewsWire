@@ -8,16 +8,24 @@
 
 import AppKit
 
-class UnreadCountView : NSView {
+class UnreadCountView : NSImageView {
 
 	struct Appearance {
 		static let padding = NSEdgeInsets(top: 1.0, left: 7.0, bottom: 1.0, right: 7.0)
 		static let cornerRadius: CGFloat = 8.0
-		static let backgroundColor = NSColor(named: "SidebarUnreadCountBackground")!
-		static let textColor = NSColor(named: "SidebarUnreadCountText")!
+		static let backgroundColor = NSColor.secondaryLabelColor
 		static let textSize: CGFloat = 11.0
 		static let textFont = NSFont.systemFont(ofSize: textSize, weight: NSFont.Weight.semibold)
-		static let textAttributes: [NSAttributedString.Key: AnyObject] = [NSAttributedString.Key.foregroundColor: textColor, NSAttributedString.Key.font: textFont, NSAttributedString.Key.kern: NSNull()]
+		static let textAttributes: [NSAttributedString.Key: AnyObject] = [NSAttributedString.Key.foregroundColor: NSColor.black, NSAttributedString.Key.font: textFont, NSAttributedString.Key.kern: NSNull()]
+	}
+	
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+	}
+	
+	override init(frame frameRect: NSRect) {
+		super.init(frame: frameRect)
+		contentTintColor = Appearance.backgroundColor
 	}
 
 	var unreadCount = 0 {
@@ -82,15 +90,31 @@ class UnreadCountView : NSView {
 		r.origin.y = Appearance.padding.top
 		return r
 	}
-
-	override func draw(_ dirtyRect: NSRect) {
-		let path = NSBezierPath(roundedRect: bounds, xRadius: Appearance.cornerRadius, yRadius: Appearance.cornerRadius)
-		Appearance.backgroundColor.setFill()
-		path.fill()
-
-		if unreadCount > 0 {
-			unreadCountString.draw(at: textRect().origin, withAttributes: Appearance.textAttributes)
+	
+	override func viewWillDraw() {
+		super.viewWillDraw()
+		
+		image = NSImage(size: bounds.size, flipped: true) { rect in
+			if let context = NSGraphicsContext.current {
+				let path = NSBezierPath(roundedRect: self.bounds, xRadius: Appearance.cornerRadius, yRadius: Appearance.cornerRadius)
+				NSColor.black.setFill()
+				path.fill()
+				
+				context.saveGraphicsState()
+				
+				NSGraphicsContext.current?.compositingOperation = .sourceOut
+				if self.unreadCount > 0 {
+					self.unreadCountString.draw(at: self.textRect().origin, withAttributes: Appearance.textAttributes)
+				}
+				
+				context.restoreGraphicsState()
+				return true
+			}
+			
+			return false
 		}
+		
+		image?.isTemplate = true
 	}
 	
 	var numberFormatter: NumberFormatter!
