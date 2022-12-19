@@ -53,15 +53,15 @@ struct AppAssets {
 	}()
 
 	static var articleExtractorError: RSImage = {
-		return RSImage(named: "articleExtractorError")!
+		return RSImage(systemSymbolName: "xmark.rectangle.portrait", accessibilityDescription: nil)!
 	}()
 
 	static var articleExtractorOff: RSImage = {
-		return RSImage(named: "articleExtractorOff")!
+		return RSImage(systemSymbolName: "doc.plaintext", accessibilityDescription: nil)!
 	}()
 
 	static var articleExtractorOn: RSImage = {
-		return RSImage(named: "articleExtractorOn")!
+		return RSImage(systemSymbolName: "doc.plaintext.fill", accessibilityDescription: nil)!
 	}()
 
 	static var articleTheme: RSImage = {

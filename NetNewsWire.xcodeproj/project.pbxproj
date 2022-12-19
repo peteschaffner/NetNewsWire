@@ -740,6 +740,16 @@
 		B2C12C6628F4C46800373730 /* URLPasteboardWriter+NetNewsWire.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C12C6528F4C46800373730 /* URLPasteboardWriter+NetNewsWire.swift */; };
 		B2C12C6728F4C46800373730 /* URLPasteboardWriter+NetNewsWire.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C12C6528F4C46800373730 /* URLPasteboardWriter+NetNewsWire.swift */; };
 		B528F81E23333C7E00E735DD /* page.html in Resources */ = {isa = PBXBuildFile; fileRef = B528F81D23333C7E00E735DD /* page.html */; };
+		C1D308512916103500342AF3 /* Readability.js in Resources */ = {isa = PBXBuildFile; fileRef = C1D308502916103500342AF3 /* Readability.js */; };
+		C1D308522916103500342AF3 /* Readability.js in Resources */ = {isa = PBXBuildFile; fileRef = C1D308502916103500342AF3 /* Readability.js */; };
+		C1D308532916103500342AF3 /* Readability.js in Resources */ = {isa = PBXBuildFile; fileRef = C1D308502916103500342AF3 /* Readability.js */; };
+		C1D308562916EF5000342AF3 /* FootnotePopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1D308542916EF5000342AF3 /* FootnotePopover.xib */; };
+		C1D308572916EF5000342AF3 /* FootnotePopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1D308542916EF5000342AF3 /* FootnotePopover.xib */; };
+		C1D308582916EF5000342AF3 /* FootnotePopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1D308542916EF5000342AF3 /* FootnotePopover.xib */; };
+		C1D308592916EF5000342AF3 /* FootnotePopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D308552916EF5000342AF3 /* FootnotePopoverViewController.swift */; };
+		C1D3085A2916EF5000342AF3 /* FootnotePopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D308552916EF5000342AF3 /* FootnotePopoverViewController.swift */; };
+		C1D3085D2916F50100342AF3 /* NSPopover+Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D3085C2916F50100342AF3 /* NSPopover+Background.swift */; };
+		C1D3085E2916F50100342AF3 /* NSPopover+Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1D3085C2916F50100342AF3 /* NSPopover+Background.swift */; };
 		C5A6ED5223C9AF4300AB6BE2 /* TitleActivityItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A6ED5123C9AF4300AB6BE2 /* TitleActivityItemSource.swift */; };
 		C5A6ED6D23C9B0C800AB6BE2 /* UIActivityViewController-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A6ED6C23C9B0C800AB6BE2 /* UIActivityViewController-Extensions.swift */; };
 		D3555BF524664566005E48C3 /* ArticleSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3555BF324664539005E48C3 /* ArticleSearchBar.swift */; };
@@ -1539,6 +1549,11 @@
 		C4A3967C2A2AEC5400C89D55 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/NNW3OpenPanelAccessoryView.strings"; sourceTree = "<group>"; };
 		C4A3967D2A2AEC5400C89D55 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ExportOPMLSheet.strings"; sourceTree = "<group>"; };
 		C4A3967E2A2AEC5400C89D55 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ImportOPMLSheet.strings"; sourceTree = "<group>"; };
+		C4A3967F2A2AEC5400C89D55 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/ExtensionPointDetail.strings"; sourceTree = "<group>"; };
+		C1D308502916103500342AF3 /* Readability.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Readability.js; sourceTree = "<group>"; };
+		C1D308542916EF5000342AF3 /* FootnotePopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FootnotePopover.xib; sourceTree = "<group>"; };
+		C1D308552916EF5000342AF3 /* FootnotePopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FootnotePopoverViewController.swift; sourceTree = "<group>"; };
+		C1D3085C2916F50100342AF3 /* NSPopover+Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPopover+Background.swift"; sourceTree = "<group>"; };
 		C5A6ED5123C9AF4300AB6BE2 /* TitleActivityItemSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleActivityItemSource.swift; sourceTree = "<group>"; };
 		C5A6ED6C23C9B0C800AB6BE2 /* UIActivityViewController-Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityViewController-Extensions.swift"; sourceTree = "<group>"; };
 		D3555BF324664539005E48C3 /* ArticleSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleSearchBar.swift; sourceTree = "<group>"; };
@@ -2213,6 +2228,7 @@
 			children = (
 				51FA73A32332BE110090D516 /* ArticleExtractor.swift */,
 				51FA73A62332BE880090D516 /* ExtractedArticle.swift */,
+				C1D308502916103500342AF3 /* Readability.js */,
 			);
 			path = "Article Extractor";
 			sourceTree = "<group>";
@@ -2471,6 +2487,9 @@
 				84E8E0EA202F693600562D8F /* DetailWebView.swift */,
 				84D52E941FE588BB00D14F5B /* DetailStatusBarView.swift */,
 				5141E7552374A2890013FF27 /* DetailIconSchemeHandler.swift */,
+				C1D308552916EF5000342AF3 /* FootnotePopoverViewController.swift */,
+				C1D3085C2916F50100342AF3 /* NSPopover+Background.swift */,
+				C1D308542916EF5000342AF3 /* FootnotePopover.xib */,
 				5103A9972421643300410853 /* blank.html */,
 				B528F81D23333C7E00E735DD /* page.html */,
 				5142194A2353C1CF00E07E2C /* main_mac.js */,
@@ -3474,6 +3493,7 @@
 				65ED4052235DEF6C0081F399 /* template.html in Resources */,
 				65ED4054235DEF6C0081F399 /* Main.storyboard in Resources */,
 				5137C2E526F3F52D009EFEDB /* Sepia.nnwtheme in Resources */,
+				C1D308572916EF5000342AF3 /* FootnotePopover.xib in Resources */,
 				65ED4056235DEF6C0081F399 /* NetNewsWire.sdef in Resources */,
 				DF5124E02A23108000BBAB1F /* AccountsDetail.xib in Resources */,
 				DF6DE5152965924C002EC085 /* InfoPlist.strings in Resources */,
@@ -3486,6 +3506,7 @@
 				51DEE81926FBFF84006DAA56 /* Promenade.nnwtheme in Resources */,
 				65ED405D235DEF6C0081F399 /* SidebarKeyboardShortcuts.plist in Resources */,
 				51D0214726ED617100FF2E0F /* core.css in Resources */,
+				C1D308522916103500342AF3 /* Readability.js in Resources */,
 				DDF9E1D828EDF2FC000BC355 /* notificationSoundBlip.mp3 in Resources */,
 				DF5124D42A230FE400BBAB1F /* AccountsAddCloudKit.xib in Resources */,
 				65ED405E235DEF6C0081F399 /* DefaultFeeds.opml in Resources */,
@@ -3537,6 +3558,7 @@
 				511D43EF231FBDE900FB1562 /* LaunchScreenPad.storyboard in Resources */,
 				511D43D2231FA62C00FB1562 /* GlobalKeyboardShortcuts.plist in Resources */,
 				84C9FCA12262A1B300D921D6 /* Main.storyboard in Resources */,
+				C1D308582916EF5000342AF3 /* FootnotePopover.xib in Resources */,
 				51BB7C312335ACDE008E8144 /* page.html in Resources */,
 				51077C5A27A86D16000C71DB /* Hyperlegible.nnwtheme in Resources */,
 				DDF9E1D928EDF2FC000BC355 /* notificationSoundBlip.mp3 in Resources */,
@@ -3545,6 +3567,7 @@
 				1768140B2564BB8300D98635 /* NetNewsWire_iOSwidgetextension_target.xcconfig in Resources */,
 				5103A9B424216A4200410853 /* blank.html in Resources */,
 				51D0214826ED617100FF2E0F /* core.css in Resources */,
+				C1D308532916103500342AF3 /* Readability.js in Resources */,
 				84C9FCA42262A1B800D921D6 /* LaunchScreenPhone.storyboard in Resources */,
 				511D43D1231FA62800FB1562 /* SidebarKeyboardShortcuts.plist in Resources */,
 				51C452AB22650DC600C03939 /* template.html in Resources */,
@@ -3587,10 +3610,12 @@
 				B27EEBF9244D15F3000932E6 /* stylesheet.css in Resources */,
 				DF6DE5142965924C002EC085 /* InfoPlist.strings in Resources */,
 				5144EA3B227A379E00D19003 /* ImportOPMLSheet.xib in Resources */,
+				C1D308512916103500342AF3 /* Readability.js in Resources */,
 				844B5B691FEA20DF00C7C76A /* SidebarKeyboardShortcuts.plist in Resources */,
 				DDF9E1D728EDF2FC000BC355 /* notificationSoundBlip.mp3 in Resources */,
 				DF5124D32A230FE400BBAB1F /* AccountsAddCloudKit.xib in Resources */,
 				51077C5827A86D16000C71DB /* Hyperlegible.nnwtheme in Resources */,
+				C1D308562916EF5000342AF3 /* FootnotePopover.xib in Resources */,
 				84A3EE5F223B667F00557320 /* DefaultFeeds.opml in Resources */,
 				849C78902362AAFC009A71E4 /* ExportOPMLSheet.xib in Resources */,
 				84C9FC8222629E4800D921D6 /* Preferences.storyboard in Resources */,
@@ -4031,6 +4056,7 @@
 				65ED401B235DEF6C0081F399 /* TimelineViewController.swift in Sources */,
 				65ED401C235DEF6C0081F399 /* FaviconGenerator.swift in Sources */,
 				65ED401D235DEF6C0081F399 /* RefreshInterval.swift in Sources */,
+				C1D3085A2916EF5000342AF3 /* FootnotePopoverViewController.swift in Sources */,
 				65ED401E235DEF6C0081F399 /* TimelineCellData.swift in Sources */,
 				65ED401F235DEF6C0081F399 /* BuiltinSmartFeedInspectorViewController.swift in Sources */,
 				65ED4020235DEF6C0081F399 /* AppDelegate+Scriptability.swift in Sources */,
@@ -4077,6 +4103,7 @@
 				51C4CFF124D37D1F00AF9874 /* Secrets.swift in Sources */,
 				65ED403F235DEF6C0081F399 /* ArticleRenderer.swift in Sources */,
 				65ED4040235DEF6C0081F399 /* GeneralPrefencesViewController.swift in Sources */,
+				C1D3085E2916F50100342AF3 /* NSPopover+Background.swift in Sources */,
 				179DB1DFBCF9177104B12E0F /* AccountsNewsBlurWindowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -4390,6 +4417,7 @@
 				849A97801ED9EC42007D329B /* DetailViewController.swift in Sources */,
 				173A64172547BE0900267F6E /* AccountType+Helpers.swift in Sources */,
 				518C3193237B00D9004D740F /* DetailIconSchemeHandler.swift in Sources */,
+				C1D3085D2916F50100342AF3 /* NSPopover+Background.swift in Sources */,
 				84C9FC6722629B9000D921D6 /* AppDelegate.swift in Sources */,
 				510C417F24E5D1AE008226FD /* ExtensionContainersFile.swift in Sources */,
 				84C9FC7A22629E1200D921D6 /* PreferencesTableViewBackgroundView.swift in Sources */,
@@ -4422,6 +4450,7 @@
 				51C4CFF024D37D1F00AF9874 /* Secrets.swift in Sources */,
 				849A976D1ED9EBC8007D329B /* TimelineTableView.swift in Sources */,
 				84D52E951FE588BB00D14F5B /* DetailStatusBarView.swift in Sources */,
+				C1D308592916EF5000342AF3 /* FootnotePopoverViewController.swift in Sources */,
 				D5E4CC64202C1AC1009B4FFC /* MainWindowController+Scriptability.swift in Sources */,
 				51A052CE244FB9D7006C2024 /* AddFeedWindowControllerDelegate.swift in Sources */,
 				84C9FC7922629E1200D921D6 /* PreferencesWindowController.swift in Sources */,

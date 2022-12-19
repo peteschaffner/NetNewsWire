@@ -11,35 +11,23 @@ import Foundation
 struct ExtractedArticle: Codable, Equatable {
 
 	let title: String?
-	let author: String?
-	let datePublished: String?
-	let dek: String?
-	let leadImageURL: String?
 	let content: String?
-	let nextPageURL: String?
-	let url: String?
-	let domain: String?
+	let textContent: String?
+	let length: Int?
 	let excerpt: String?
-	let wordCount: Int?
-	let direction: String?
-	let totalPages: Int?
-	let renderedPages: Int?
+	let byline: String?
+	let dir: String?
+	let siteName: String?
 	
 	enum CodingKeys: String, CodingKey {
-		case title = "title"
-		case author = "author"
-		case datePublished = "date_published"
-		case dek = "dek"
-		case leadImageURL = "lead_image_url"
-		case content = "content"
-		case nextPageURL = "next_page_url"
-		case url = "url"
-		case domain = "domain"
-		case excerpt = "excerpt"
-		case wordCount = "word_count"
-		case direction = "direction"
-		case totalPages = "total_pages"
-		case renderedPages = "rendered_pages"
+		case title
+		case content
+		case textContent
+		case length
+		case excerpt
+		case byline
+		case dir
+		case siteName
 	}
 	
 }
