@@ -20,7 +20,8 @@ struct TimelineCellAppearance: Equatable {
 	let dateMarginLeft: CGFloat = 8.0
 
 	let titleFont: NSFont
-	let titleBottomMargin: CGFloat = 1.0
+	let titleBottomMargin: CGFloat = 2.0
+	let textBottomMargin: CGFloat = 7
 	let titleNumberOfLines = 3
 	
 	let textFont: NSFont
@@ -32,7 +33,7 @@ struct TimelineCellAppearance: Equatable {
 
 	let starDimension: CGFloat = 13.0
 
-	let drawsGrid = false
+	let drawsGrid = true
 
 	let iconSize = NSSize(width: 48, height: 48)
 	let iconMarginLeft: CGFloat = 8.0
@@ -43,16 +44,12 @@ struct TimelineCellAppearance: Equatable {
 	let boxLeftMargin: CGFloat
 
 	init(showIcon: Bool, fontSize: FontSize) {
-
-		let actualFontSize = AppDefaults.shared.actualFontSize(for: fontSize)
-		let smallItemFontSize = floor(actualFontSize * 0.90)
-		let largeItemFontSize = actualFontSize
-
-		self.feedNameFont = NSFont.systemFont(ofSize: smallItemFontSize, weight: NSFont.Weight.bold)
-		self.dateFont = NSFont.systemFont(ofSize: smallItemFontSize, weight: NSFont.Weight.bold)
-		self.titleFont = NSFont.systemFont(ofSize: largeItemFontSize, weight: NSFont.Weight.semibold)
-		self.textFont = NSFont.systemFont(ofSize: largeItemFontSize)
-		self.textOnlyFont = NSFont.systemFont(ofSize: largeItemFontSize)
+		self.feedNameFont = NSFont.systemFont(ofSize: NSFont.smallSystemFontSize)
+		self.dateFont = self.feedNameFont
+		
+		self.titleFont = NSFont.systemFont(ofSize: NSFont.systemFontSize, weight: .semibold)
+		self.textFont =  NSFont.systemFont(ofSize: NSFont.systemFontSize)
+		self.textOnlyFont = NSFont.systemFont(ofSize: NSFont.systemFontSize)
 
 		self.showIcon = showIcon
 		

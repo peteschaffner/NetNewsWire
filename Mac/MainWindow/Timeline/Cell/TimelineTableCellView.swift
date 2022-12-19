@@ -102,9 +102,14 @@ class TimelineTableCellView: NSTableCellView {
 		setFrame(for: summaryView, rect: layoutRects.summaryRect)
 		setFrame(for: textView, rect: layoutRects.textRect)
 
-		dateView.setFrame(ifNotEqualTo: layoutRects.dateRect)
+		var dateRect = layoutRects.dateRect
+		dateRect.origin.y = bounds.height - dateRect.size.height - cellAppearance.cellPadding.bottom
+		dateView.setFrame(ifNotEqualTo: dateRect)
 		unreadIndicatorView.setFrame(ifNotEqualTo: layoutRects.unreadIndicatorRect)
-		feedNameView.setFrame(ifNotEqualTo: layoutRects.feedNameRect)
+		
+		var feedNameRect = layoutRects.feedNameRect
+		feedNameRect.origin.y = dateRect.origin.y
+		feedNameView.setFrame(ifNotEqualTo: feedNameRect)
 		iconView.setFrame(ifNotEqualTo: layoutRects.iconImageRect)
 		starView.setFrame(ifNotEqualTo: layoutRects.starRect)
 	}
@@ -158,8 +163,8 @@ private extension TimelineTableCellView {
 
 	func makeTextFieldColorsNormal() {
 		titleView.textColor = NSColor.labelColor
-		feedNameView.textColor = NSColor.secondaryLabelColor
-		dateView.textColor = NSColor.secondaryLabelColor
+		feedNameView.textColor = NSColor.tertiaryLabelColor
+		dateView.textColor = feedNameView.textColor
 		summaryView.textColor = NSColor.secondaryLabelColor
 		textView.textColor = NSColor.labelColor
 	}

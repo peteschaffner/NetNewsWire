@@ -130,7 +130,7 @@ private extension TimelineCellLayout {
 		}
 
 		var r = textBoxRect
-		r.origin.y = NSMaxY(titleRect)
+		r.origin.y = NSMaxY(titleRect) + appearance.titleBottomMargin
 		let summaryNumberOfLines = appearance.titleNumberOfLines - titleNumberOfLines
 		
 		let sizeInfo = MultilineTextFieldSizer.size(for: cellData.text, font: appearance.textOnlyFont, numberOfLines: summaryNumberOfLines, width: Int(textBoxRect.width))
@@ -163,7 +163,7 @@ private extension TimelineCellLayout {
 		
 		var r = NSZeroRect
 		r.size = textFieldSize
-		r.origin.y = NSMaxY(rectAbove) + appearance.titleBottomMargin
+		r.origin.y = NSMaxY(rectAbove) + appearance.textBottomMargin
 		r.size.width = textFieldSize.width
 
 		r.origin.x = textBoxRect.maxX - textFieldSize.width

@@ -9,8 +9,6 @@
 import AppKit
 
 @MainActor final class TimelineTableRowView : NSTableRowView {
-
-	private var separator: NSView?
 	
 	override var isOpaque: Bool {
 		return true
@@ -25,7 +23,6 @@ import AppKit
 	override var isSelected: Bool {
 		didSet {
 			cellView?.isSelected = isSelected
-			separator?.isHidden = isSelected
 		}
 	}
 	
@@ -44,27 +41,6 @@ import AppKit
 			}
 		}
 		return nil
-	}
-
-	override func viewDidMoveToSuperview() {
-		if AppDefaults.shared.timelineShowsSeparators {
-			addSeparatorView()
-		}
-	}
-	
-	private func addSeparatorView() {
-		guard let cellView = cellView, separator == nil else { return }
-		separator = NSView()
-		separator!.translatesAutoresizingMaskIntoConstraints = false
-		separator!.wantsLayer = true
-		separator!.layer?.backgroundColor = AppAssets.timelineSeparatorColor.cgColor
-		addSubview(separator!)
-		NSLayoutConstraint.activate([
-			separator!.leadingAnchor.constraint(equalTo: cellView.leadingAnchor, constant: 20),
-			separator!.trailingAnchor.constraint(equalTo: cellView.trailingAnchor, constant: -4),
-			separator!.heightAnchor.constraint(equalToConstant: 1),
-			separator!.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 0)
-		])
 	}
 	
 }
