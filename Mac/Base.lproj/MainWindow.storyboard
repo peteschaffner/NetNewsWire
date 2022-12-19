@@ -342,17 +342,16 @@
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="EAt-cc-a4X" customClass="DetailContainerView" customModule="NetNewsWire" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="730" height="300"/>
                                 <connections>
-                                    <outlet property="detailStatusBarView" destination="xI5-lx-RD8" id="2lM-To-54v"/>
                                     <outlet property="findBarContainerView" destination="lMN-Bl-G9Q" id="coK-s3-CKs"/>
                                     <outlet property="findBarHeightConstraint" destination="C1e-J5-baX" id="dk9-ah-mc0"/>
                                 </connections>
                             </customView>
-                            <customView hidden="YES" alphaValue="0.90000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="xI5-lx-RD8" customClass="DetailStatusBarView" customModule="NetNewsWire" customModuleProvider="target">
-                                <rect key="frame" x="6" y="2" width="12" height="20"/>
+                            <visualEffectView blendingMode="behindWindow" material="appearanceBased" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="gVC-w5-ZKv" customClass="DetailStatusBarView" customModule="NetNewsWire" customModuleProvider="target">
+                                <rect key="frame" x="6" y="6" width="38" height="20"/>
                                 <subviews>
                                     <textField horizontalHuggingPriority="850" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Dim-ed-Dcz" userLabel="URL Label">
-                                        <rect key="frame" x="4" y="2" width="4" height="16"/>
-                                        <textFieldCell key="cell" lineBreakMode="truncatingMiddle" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" usesSingleLineMode="YES" id="znU-Fh-L7H">
+                                        <rect key="frame" x="4" y="2" width="30" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="truncatingMiddle" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="URL" usesSingleLineMode="YES" id="znU-Fh-L7H">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -360,15 +359,15 @@
                                     </textField>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="Dim-ed-Dcz" firstAttribute="centerY" secondItem="xI5-lx-RD8" secondAttribute="centerY" id="Hna-uB-3F7"/>
-                                    <constraint firstAttribute="trailing" secondItem="Dim-ed-Dcz" secondAttribute="trailing" constant="6" id="O5q-ZN-DjZ"/>
-                                    <constraint firstAttribute="height" constant="20" id="Sfk-Ri-WoD"/>
-                                    <constraint firstItem="Dim-ed-Dcz" firstAttribute="leading" secondItem="xI5-lx-RD8" secondAttribute="leading" constant="6" id="Y9c-WR-ZBY"/>
+                                    <constraint firstAttribute="height" constant="20" id="7K0-Qd-tTx"/>
+                                    <constraint firstAttribute="trailing" secondItem="Dim-ed-Dcz" secondAttribute="trailing" constant="6" id="Lbg-05-IbF"/>
+                                    <constraint firstItem="Dim-ed-Dcz" firstAttribute="leading" secondItem="gVC-w5-ZKv" secondAttribute="leading" constant="6" id="Oc1-dZ-9ao"/>
+                                    <constraint firstItem="Dim-ed-Dcz" firstAttribute="centerY" secondItem="gVC-w5-ZKv" secondAttribute="centerY" id="iI1-0k-ITI"/>
                                 </constraints>
                                 <connections>
-                                    <outlet property="urlLabel" destination="Dim-ed-Dcz" id="8fY-oo-cGT"/>
+                                    <outlet property="urlLabel" destination="Dim-ed-Dcz" id="qnq-ha-zYy"/>
                                 </connections>
-                            </customView>
+                            </visualEffectView>
                             <customView translatesAutoresizingMaskIntoConstraints="NO" id="lMN-Bl-G9Q" userLabel="Find Bar Container View">
                                 <rect key="frame" x="0.0" y="300" width="730" height="0.0"/>
                                 <constraints>
@@ -377,23 +376,23 @@
                             </customView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="xI5-lx-RD8" firstAttribute="leading" secondItem="cJ9-6s-66u" secondAttribute="leading" constant="6" id="5vz-ys-CAo"/>
+                            <constraint firstAttribute="bottom" secondItem="gVC-w5-ZKv" secondAttribute="bottom" constant="6" id="Iee-wR-etv"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="gVC-w5-ZKv" secondAttribute="trailing" constant="6" id="O3J-Gr-fPe"/>
                             <constraint firstItem="lMN-Bl-G9Q" firstAttribute="top" secondItem="cJ9-6s-66u" secondAttribute="top" placeholder="YES" id="Qyj-r4-LOb"/>
                             <constraint firstItem="EAt-cc-a4X" firstAttribute="top" secondItem="cJ9-6s-66u" secondAttribute="top" id="Sb7-eK-hUs"/>
+                            <constraint firstItem="gVC-w5-ZKv" firstAttribute="leading" secondItem="cJ9-6s-66u" secondAttribute="leading" constant="6" id="aWQ-e4-ytv"/>
                             <constraint firstItem="EAt-cc-a4X" firstAttribute="bottom" secondItem="cJ9-6s-66u" secondAttribute="bottom" id="dvJ-B7-cYU"/>
                             <constraint firstItem="lMN-Bl-G9Q" firstAttribute="leading" secondItem="cJ9-6s-66u" secondAttribute="leading" id="fjq-7Z-e0q"/>
                             <constraint firstItem="EAt-cc-a4X" firstAttribute="leading" secondItem="cJ9-6s-66u" secondAttribute="leading" id="mYI-QQ-pG2"/>
                             <constraint firstAttribute="trailing" secondItem="lMN-Bl-G9Q" secondAttribute="trailing" id="oth-5X-F9R"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xI5-lx-RD8" secondAttribute="trailing" constant="6" id="pbD-LN-Gk1"/>
                             <constraint firstAttribute="trailing" secondItem="EAt-cc-a4X" secondAttribute="trailing" id="yWN-Th-puZ"/>
-                            <constraint firstAttribute="bottom" secondItem="xI5-lx-RD8" secondAttribute="bottom" constant="2" id="zsv-B0-ChW"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kji-Gx-zvn"/>
                         <viewLayoutGuide key="layoutMargins" id="Nri-tr-pWM"/>
                     </customView>
                     <connections>
                         <outlet property="containerView" destination="EAt-cc-a4X" id="oqf-yI-VIb"/>
-                        <outlet property="statusBarView" destination="xI5-lx-RD8" id="meP-4g-U63"/>
+                        <outlet property="statusBarView" destination="gVC-w5-ZKv" id="A9X-Lf-2mm"/>
                     </connections>
                 </viewController>
                 <customObject id="vzM-Vn-mEn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
