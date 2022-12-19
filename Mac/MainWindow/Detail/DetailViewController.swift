@@ -24,6 +24,7 @@ enum DetailState: Equatable {
 
 	@IBOutlet var containerView: DetailContainerView!
 	@IBOutlet var statusBarView: DetailStatusBarView!
+	let footnotePopoverViewController = FootnotePopoverViewController()
 
 	lazy var regularWebViewController = {
 		return createWebViewController()
@@ -139,6 +140,26 @@ extension DetailViewController: DetailWebViewControllerDelegate {
 			return
 		}
 		statusBarView.mouseoverLink = nil
+	}
+	
+	func mouseDidClick(_ detailWebViewController: DetailWebViewController, footnote: [String: Any]) {
+		guard !footnote.isEmpty, detailWebViewController === currentWebViewController else {
+			return
+		}
+		
+		let topSafeAreaInset = containerView.safeAreaInsets.top // This accounts for the height of the toolbar
+		let rect = NSRect(x: footnote["x"] as! CGFloat, y: (footnote["y"] as! CGFloat) + topSafeAreaInset, width: footnote["width"] as! CGFloat, height: footnote["height"] as! CGFloat)
+		let footnoteText = footnote["text"] as! String
+				
+		footnotePopoverViewController.footnoteText = footnoteText
+				
+		self.present(footnotePopoverViewController, asPopoverRelativeTo: rect, of: detailWebViewController.view, preferredEdge: .maxY, behavior: .transient)
+	}
+	
+	func windowDidScroll(_ detailWebViewController: DetailWebViewController, isTop: Bool) {
+		if footnotePopoverViewController.presentingViewController != nil {
+			self.dismiss(footnotePopoverViewController)
+		}
 	}
 }
 

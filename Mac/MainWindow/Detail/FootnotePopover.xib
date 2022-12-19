@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="19142.2" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" customObjectInstantitationMethod="direct">
+    <dependencies>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="19142.2"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <customObject id="-2" userLabel="File's Owner" customClass="FootnotePopoverViewController" customModule="NetNewsWire" customModuleProvider="target">
+            <connections>
+                <outlet property="footnoteLabel" destination="8rr-Hy-dnI" id="GIa-xt-oPG"/>
+                <outlet property="view" destination="Hz6-mo-xeY" id="0bl-1N-x8E"/>
+            </connections>
+        </customObject>
+        <customObject id="-1" userLabel="First Responder" customClass="FirstResponder"/>
+        <customObject id="-3" userLabel="Application" customClass="NSObject"/>
+        <customView id="Hz6-mo-xeY">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="66"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <subviews>
+                <textField horizontalHuggingPriority="751" verticalHuggingPriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="8rr-Hy-dnI">
+                    <rect key="frame" x="116" y="25" width="89" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="260" id="mFI-qe-qTm"/>
+                    </constraints>
+                    <textFieldCell key="cell" title="Footnote text." id="Njg-AD-NYb">
+                        <font key="font" usesAppearanceFont="YES"/>
+                        <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                    </textFieldCell>
+                </textField>
+            </subviews>
+            <constraints>
+                <constraint firstItem="8rr-Hy-dnI" firstAttribute="top" secondItem="Hz6-mo-xeY" secondAttribute="top" constant="25" id="3PP-VJ-7JP"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="8rr-Hy-dnI" secondAttribute="trailing" constant="30" id="Npb-Dy-Zl3"/>
+                <constraint firstAttribute="bottom" secondItem="8rr-Hy-dnI" secondAttribute="bottom" constant="25" id="ava-ee-1XW"/>
+                <constraint firstItem="8rr-Hy-dnI" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Hz6-mo-xeY" secondAttribute="leading" constant="30" id="rFr-cu-HZF"/>
+                <constraint firstItem="8rr-Hy-dnI" firstAttribute="centerX" secondItem="Hz6-mo-xeY" secondAttribute="centerX" id="tHZ-4H-CNt"/>
+            </constraints>
+            <point key="canvasLocation" x="139" y="135"/>
+        </customView>
+    </objects>
+</document>

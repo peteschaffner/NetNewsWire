@@ -15,6 +15,8 @@ import Articles
 protocol DetailWebViewControllerDelegate: AnyObject {
 	func mouseDidEnter(_: DetailWebViewController, link: String)
 	func mouseDidExit(_: DetailWebViewController)
+	func mouseDidClick(_: DetailWebViewController, footnote: [String: Any])
+	func windowDidScroll(_: DetailWebViewController, isTop: Bool)
 }
 
 @MainActor final class DetailWebViewController: NSViewController {
@@ -72,11 +74,12 @@ protocol DetailWebViewControllerDelegate: AnyObject {
 			return false
 		}
 	}
-
-	private struct MessageName {
-		static let mouseDidEnter = "mouseDidEnter"
-		static let mouseDidExit = "mouseDidExit"
-		static let windowDidScroll = "windowDidScroll"
+	
+	private enum MessageName: String {
+		case mouseDidEnter
+		case mouseDidExit
+		case mouseDidClick
+		case windowDidScroll
 	}
 
 	override func loadView() {
@@ -93,9 +96,10 @@ protocol DetailWebViewControllerDelegate: AnyObject {
 		configuration.mediaTypesRequiringUserActionForPlayback = .audio
 
 		let userContentController = WKUserContentController()
-		userContentController.add(self, name: MessageName.windowDidScroll)
-		userContentController.add(self, name: MessageName.mouseDidEnter)
-		userContentController.add(self, name: MessageName.mouseDidExit)
+		userContentController.add(self, name: MessageName.windowDidScroll.rawValue)
+		userContentController.add(self, name: MessageName.mouseDidEnter.rawValue)
+		userContentController.add(self, name: MessageName.mouseDidExit.rawValue)
+		userContentController.add(self, name: MessageName.mouseDidClick.rawValue)
 		configuration.userContentController = userContentController
 
 		webView = DetailWebView(frame: NSRect.zero, configuration: configuration)
@@ -202,14 +206,28 @@ protocol DetailWebViewControllerDelegate: AnyObject {
 // MARK: - WKScriptMessageHandler
 
 extension DetailWebViewController: WKScriptMessageHandler {
-
+	
 	func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-		if message.name == MessageName.windowDidScroll {
-			windowScrollY = message.body as? CGFloat
-		} else if message.name == MessageName.mouseDidEnter, let link = message.body as? String {
-			delegate?.mouseDidEnter(self, link: link)
-		} else if message.name == MessageName.mouseDidExit {
+		switch MessageName(rawValue: message.name) {
+		case .mouseDidEnter:
+			if let link = message.body as? String {
+				delegate?.mouseDidEnter(self, link: link)
+			}
+		case .mouseDidExit:
 			delegate?.mouseDidExit(self)
+		case .mouseDidClick:
+			if let footnote = message.body as? [String: Any] {
+				delegate?.mouseDidClick(self, footnote: footnote)
+			}
+		case .windowDidScroll:
+			if let response = message.body as? [String: CGFloat] {
+				let isTop = response["isTop"] == 1 ? true : false
+				
+				delegate?.windowDidScroll(self, isTop: isTop)
+				windowScrollY = response["scrollY"]
+			}
+		case .none:
+			return
 		}
 	}
 }
