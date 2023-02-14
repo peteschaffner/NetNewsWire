@@ -46,7 +46,7 @@ public enum AccountType: Int, Codable {
 	case theOldReader = 23
 	
 	public var isDeveloperRestricted: Bool {
-		return self == .cloudKit || self == .feedbin || self == .feedly || self == .inoreader
+		return self == .cloudKit || self == .feedly || self == .inoreader
 	}
 	
 }
