@@ -987,6 +987,7 @@ extension MainWindowController: NSToolbarDelegate {
 			.toggleReadArticlesFilter,
 			.timelineTrackingSeparator,
 			.flexibleSpace,
+			.space,
 			.nextUnread,
 			.markRead,
 			.markStar,
