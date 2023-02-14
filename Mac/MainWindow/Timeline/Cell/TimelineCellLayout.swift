@@ -191,9 +191,7 @@ private extension TimelineCellLayout {
 		var r = NSZeroRect
 		r.size = NSSize(width: appearance.unreadCircleDimension, height: appearance.unreadCircleDimension)
 		r.origin.x = appearance.cellPadding.left
-		r.origin.y = titleRect.minY + 6
-//		r = RSRectCenteredVerticallyInRect(r, titleRect)
-//		r.origin.y += 1
+		r.origin.y = titleRect.minY + 4
 
 		return r
 	}
