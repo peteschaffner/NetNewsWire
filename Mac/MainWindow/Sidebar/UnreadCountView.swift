@@ -19,15 +19,6 @@ class UnreadCountView : NSImageView {
 		static let textAttributes: [NSAttributedString.Key: AnyObject] = [NSAttributedString.Key.foregroundColor: NSColor.black, NSAttributedString.Key.font: textFont, NSAttributedString.Key.kern: NSNull()]
 	}
 	
-	required init?(coder: NSCoder) {
-		super.init(coder: coder)
-	}
-	
-	override init(frame frameRect: NSRect) {
-		super.init(frame: frameRect)
-		contentTintColor = Appearance.backgroundColor
-	}
-
 	var unreadCount = 0 {
 		didSet {
 			invalidateIntrinsicContentSize()
@@ -121,6 +112,7 @@ class UnreadCountView : NSImageView {
 	
 	override init(frame frameRect: NSRect) {
 		super.init(frame: frameRect)
+		contentTintColor = Appearance.backgroundColor
 		self.frame = frameRect
 		
 		let formatter = NumberFormatter()
