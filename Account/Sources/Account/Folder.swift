@@ -65,6 +65,8 @@ public final class Folder: FeedProtocol, Container, Hashable {
 	}
 
 	// MARK: - Renamable
+	
+	@MainActor public func rename(to newName: String) async throws { }
 
 	@MainActor public func rename(to name: String) async throws {
 		guard let account = account else { return }
