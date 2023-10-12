@@ -49,6 +49,8 @@ enum TimelineSourceMode {
 	private let articleThemeMenuToolbarItem = NSMenuToolbarItem(itemIdentifier: .articleThemeMenu)
 	private var searchString: String? = nil
 	private var lastSentSearchString: String? = nil
+	private var savedSearchArticles: ArticleArray? = nil
+	private var savedSearchArticleIds: Set<String>? = nil
 	private var timelineSourceMode: TimelineSourceMode = .regular {
 		didSet {
 			timelineContainerViewController?.showTimeline(for: timelineSourceMode)
@@ -758,7 +760,7 @@ extension MainWindowController: NSSearchFieldDelegate {
 			return
 		}
 		lastSentSearchString = searchString
-		let smartFeed = SmartFeed(delegate: SearchFeedDelegate(searchString: searchString))
+		let smartFeed = SmartFeed(delegate: SearchTimelineFeedDelegate(searchString: searchString, articleIDs: savedSearchArticleIds!))
 		timelineContainerViewController?.setRepresentedObjects([smartFeed], mode: .search)
 		searchSmartFeed = smartFeed
 		updateWindowTitle()
@@ -775,6 +777,11 @@ extension MainWindowController: NSSearchFieldDelegate {
 	}
 
 	private func startSearchingIfNeeded() {
+		if savedSearchArticles == nil {
+			let articles = currentTimelineViewController!.articles
+			savedSearchArticles = articles
+			savedSearchArticleIds = Set(articles.map { $0.articleID })
+		}
 		timelineSourceMode = .search
 		updateWindowTitle()
 	}
@@ -782,6 +789,8 @@ extension MainWindowController: NSSearchFieldDelegate {
 	private func stopSearchingIfNeeded() {
 		searchString = nil
 		lastSentSearchString = nil
+		savedSearchArticles = nil
+		savedSearchArticleIds = nil
 		timelineSourceMode = .regular
 		timelineContainerViewController?.setRepresentedObjects(nil, mode: .search)
 		updateWindowTitle()
@@ -1346,7 +1355,11 @@ private extension MainWindowController {
 		guard timelineSourceMode != .search else {
 			let localizedLabel = NSLocalizedString("window.title.search.%@", comment: "Search: %@")
 			window?.title = NSString.localizedStringWithFormat(localizedLabel as NSString, searchString ?? "") as String
-			window?.subtitle = ""
+			var searchCount = 0
+			if let smartFeed = searchSmartFeed, let count = try? smartFeed.fetchArticles().count {
+				searchCount = count
+			}
+			window?.subtitle = String(searchCount) + " articles"
 			return
 		}
 		
