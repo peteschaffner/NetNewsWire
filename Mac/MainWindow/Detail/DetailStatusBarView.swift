@@ -9,9 +9,21 @@
 import AppKit
 import Articles
 
-final class DetailStatusBarView: NSView {
+final class DetailStatusBarView: NSVisualEffectView {
 
 	@IBOutlet var urlLabel: NSTextField!
+
+	override func awakeFromNib() {
+		super.awakeFromNib()
+
+		wantsLayer = true
+		layer?.cornerRadius = 4
+		layer?.cornerCurve = .continuous
+
+		blendingMode = .withinWindow
+		material = .menu
+		state = .followsWindowActiveState
+	}
 
 	var mouseoverLink: String? {
 		didSet {
@@ -21,7 +33,6 @@ final class DetailStatusBarView: NSView {
 
 	private var linkForDisplay: String? {
 		didSet {
-			needsLayout = true
 			if let link = linkForDisplay {
 				urlLabel.stringValue = link
 				self.isHidden = false
@@ -31,33 +42,6 @@ final class DetailStatusBarView: NSView {
 				self.isHidden = true
 			}
 		}
-	}
-
-	private var didConfigureLayerRadius = false
-
-	override var isOpaque: Bool {
-		return false
-	}
-	
-	override var isFlipped: Bool {
-		return true
-	}
-
-	override var wantsUpdateLayer: Bool {
-		return true
-	}
-
-	override func updateLayer() {
-		guard let layer = layer else {
-			return
-		}
-		if !didConfigureLayerRadius {
-			layer.cornerRadius = 4.0
-			didConfigureLayerRadius = true
-		}
-
-		let color = self.effectiveAppearance.isDarkMode ? NSColor.textBackgroundColor : NSColor(named: "DetailStatusBarBackground")!
-		layer.backgroundColor = color.cgColor
 	}
 }
 

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="17701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="22505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -119,7 +119,7 @@
                                                             <rect key="frame" x="11" y="0.0" width="217" height="17"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fNJ-z1-0Up">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fNJ-z1-0Up">
                                                                     <rect key="frame" x="0.0" y="1" width="145" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" lineBreakMode="truncatingTail" sendsActionOnEndEditing="YES" title="HEADER CELL" id="dRB-0K-qxz">
@@ -174,7 +174,7 @@
                                             <constraint firstAttribute="width" constant="40" id="1Yw-ER-8pT"/>
                                         </constraints>
                                     </progressIndicator>
-                                    <textField hidden="YES" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iyL-pW-cT6">
+                                    <textField hidden="YES" focusRingType="none" horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iyL-pW-cT6">
                                         <rect key="frame" x="62" y="6" width="160" height="16"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="dVE-XG-mlU">
                                             <font key="font" metaFont="system"/>
@@ -250,10 +250,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="lSU-OC-sEC">
-                                <rect key="frame" x="8" y="176" width="47" height="19"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="18" id="DoO-KI-ena"/>
-                                </constraints>
+                                <rect key="frame" x="8" y="176" width="46" height="19"/>
                                 <popUpButtonCell key="cell" type="recessed" title="Sort" bezelStyle="recessed" alignment="center" lineBreakMode="truncatingTail" borderStyle="border" tag="1" imageScaling="proportionallyDown" inset="2" pullsDown="YES" id="bl0-6I-cH2">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES" changeBackground="YES" changeGray="YES"/>
                                     <font key="font" metaFont="smallSystemBold"/>
@@ -282,6 +279,9 @@
                                         </items>
                                     </menu>
                                 </popUpButtonCell>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="18" id="DoO-KI-ena"/>
+                                </constraints>
                             </popUpButton>
                             <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="iA5-go-AO0">
                                 <rect key="frame" x="350" y="180" width="13" height="13"/>
@@ -339,15 +339,15 @@
             <objects>
                 <viewController id="Vho-7i-T8m" userLabel="Detail View Controller" customClass="DetailViewController" customModule="NetNewsWire" customModuleProvider="target" sceneMemberID="viewController">
                     <customView key="view" id="cJ9-6s-66u" customClass="DetailContainerView" customModule="NetNewsWire" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="730" height="300"/>
+                        <rect key="frame" x="0.0" y="0.0" width="728" height="300"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <subviews>
-                            <customView hidden="YES" alphaValue="0.90000000000000002" translatesAutoresizingMaskIntoConstraints="NO" id="xI5-lx-RD8" customClass="DetailStatusBarView" customModule="NetNewsWire" customModuleProvider="target">
-                                <rect key="frame" x="6" y="2" width="12" height="20"/>
+                            <visualEffectView blendingMode="behindWindow" material="appearanceBased" state="followsWindowActiveState" translatesAutoresizingMaskIntoConstraints="NO" id="Mky-ko-zsP" customClass="DetailStatusBarView" customModule="NetNewsWire" customModuleProvider="target">
+                                <rect key="frame" x="6" y="6" width="38" height="20"/>
                                 <subviews>
-                                    <textField horizontalHuggingPriority="850" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="Dim-ed-Dcz" userLabel="URL Label">
-                                        <rect key="frame" x="4" y="2" width="4" height="16"/>
-                                        <textFieldCell key="cell" lineBreakMode="truncatingMiddle" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" usesSingleLineMode="YES" id="znU-Fh-L7H">
+                                    <textField focusRingType="none" horizontalHuggingPriority="850" verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="SYZ-NG-Uwt" userLabel="URL Label">
+                                        <rect key="frame" x="4" y="2" width="30" height="16"/>
+                                        <textFieldCell key="cell" lineBreakMode="truncatingMiddle" selectable="YES" allowsUndo="NO" sendsActionOnEndEditing="YES" alignment="left" title="URL" usesSingleLineMode="YES" id="JSo-1D-0Ty">
                                             <font key="font" metaFont="system"/>
                                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -355,28 +355,28 @@
                                     </textField>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="Dim-ed-Dcz" firstAttribute="centerY" secondItem="xI5-lx-RD8" secondAttribute="centerY" id="Hna-uB-3F7"/>
-                                    <constraint firstAttribute="trailing" secondItem="Dim-ed-Dcz" secondAttribute="trailing" constant="6" id="O5q-ZN-DjZ"/>
-                                    <constraint firstAttribute="height" constant="20" id="Sfk-Ri-WoD"/>
-                                    <constraint firstItem="Dim-ed-Dcz" firstAttribute="leading" secondItem="xI5-lx-RD8" secondAttribute="leading" constant="6" id="Y9c-WR-ZBY"/>
+                                    <constraint firstAttribute="height" constant="20" id="JwK-6d-Asd"/>
+                                    <constraint firstItem="SYZ-NG-Uwt" firstAttribute="centerY" secondItem="Mky-ko-zsP" secondAttribute="centerY" id="VM4-rr-8ex"/>
+                                    <constraint firstAttribute="trailing" secondItem="SYZ-NG-Uwt" secondAttribute="trailing" constant="6" id="fsR-W7-cyl"/>
+                                    <constraint firstItem="SYZ-NG-Uwt" firstAttribute="leading" secondItem="Mky-ko-zsP" secondAttribute="leading" constant="6" id="mV0-Ds-qpY"/>
                                 </constraints>
                                 <connections>
-                                    <outlet property="urlLabel" destination="Dim-ed-Dcz" id="8fY-oo-cGT"/>
+                                    <outlet property="urlLabel" destination="SYZ-NG-Uwt" id="gQ1-2k-NOq"/>
                                 </connections>
-                            </customView>
+                            </visualEffectView>
                         </subviews>
                         <constraints>
-                            <constraint firstItem="xI5-lx-RD8" firstAttribute="leading" secondItem="cJ9-6s-66u" secondAttribute="leading" constant="6" id="5vz-ys-CAo"/>
-                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="xI5-lx-RD8" secondAttribute="trailing" constant="6" id="pbD-LN-Gk1"/>
-                            <constraint firstAttribute="bottom" secondItem="xI5-lx-RD8" secondAttribute="bottom" constant="2" id="zsv-B0-ChW"/>
+                            <constraint firstAttribute="bottom" secondItem="Mky-ko-zsP" secondAttribute="bottom" constant="6" id="0yp-b4-ccg"/>
+                            <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Mky-ko-zsP" secondAttribute="trailing" constant="6" id="K2k-NT-6cr"/>
+                            <constraint firstItem="Mky-ko-zsP" firstAttribute="leading" secondItem="cJ9-6s-66u" secondAttribute="leading" constant="6" id="YoK-gy-08W"/>
                         </constraints>
                         <connections>
-                            <outlet property="detailStatusBarView" destination="xI5-lx-RD8" id="yIZ-aP-fKF"/>
+                            <outlet property="detailStatusBarView" destination="Mky-ko-zsP" id="TYr-Aj-hFV"/>
                         </connections>
                     </customView>
                     <connections>
                         <outlet property="containerView" destination="cJ9-6s-66u" id="gXc-Pz-9sQ"/>
-                        <outlet property="statusBarView" destination="xI5-lx-RD8" id="meP-4g-U63"/>
+                        <outlet property="statusBarView" destination="Mky-ko-zsP" id="H7j-qL-TKA"/>
                     </connections>
                 </viewController>
                 <customObject id="vzM-Vn-mEn" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
