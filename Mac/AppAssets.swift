@@ -159,7 +159,7 @@ struct AppAssets {
 	}
 
 	static var markAllAsReadImage: RSImage = {
-		return RSImage(named: "markAllAsRead")!
+		RSImage(systemSymbolName: "checkmark.circle", accessibilityDescription: nil)!
 	}()
 
 	@available(macOS 11.0, *)
