@@ -150,7 +150,7 @@ struct AppAssets {
 	static var masterFolderImage: IconImage {
 		if #available(macOS 11.0, *) {
 			let image = NSImage(systemSymbolName: "folder", accessibilityDescription: nil)!
-			let preferredColor = NSColor(named: "AccentColor")!
+			let preferredColor = NSColor.controlAccentColor
 			let coloredImage = image.tinted(with: preferredColor)
 			return IconImage(coloredImage, isSymbol: true, isBackgroundSupressed: true, preferredColor: preferredColor.cgColor)
 		} else {
@@ -280,7 +280,7 @@ struct AppAssets {
 	static var unreadFeedImage: IconImage = {
 		if #available(macOS 11.0, *) {
 			let image = NSImage(systemSymbolName: "largecircle.fill.circle", accessibilityDescription: nil)!
-			let preferredColor = NSColor(named: "AccentColor")!
+			let preferredColor = NSColor.controlAccentColor
 			let coloredImage = image.tinted(with: preferredColor)
 			return IconImage(coloredImage, isSymbol: true, isBackgroundSupressed: true, preferredColor: preferredColor.cgColor)
 		} else {
