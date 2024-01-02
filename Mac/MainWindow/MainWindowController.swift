@@ -796,7 +796,20 @@ extension MainWindowController: NSToolbarDelegate {
 
 		case .toggleReadArticlesFilter:
 			let title = NSLocalizedString("Read Articles Filter", comment: "Read Articles Filter")
-			return buildToolbarButton(.toggleReadArticlesFilter, title, AppAssets.filterInactive, "toggleReadArticlesFilter:")
+			let toolbarItem = RSToolbarItem(itemIdentifier: .toggleReadArticlesFilter)
+			toolbarItem.autovalidates = true
+
+			let button = NSButton()
+			button.bezelStyle = .texturedRounded
+			button.setButtonType(.toggle)
+			button.image = AppAssets.filterInactive
+			button.imageScaling = .scaleProportionallyDown
+			button.action = #selector(toggleReadArticlesFilter(_:))
+
+			toolbarItem.view = button
+			toolbarItem.toolTip = title
+			toolbarItem.label = title
+			return toolbarItem
 
 		case .timelineTrackingSeparator:
 			return NSTrackingSeparatorToolbarItem(identifier: .timelineTrackingSeparator, splitView: splitViewController!.splitView, dividerIndex: 1)
@@ -1170,6 +1183,7 @@ private extension MainWindowController {
 			if let toolbarItem = item as? NSToolbarItem, let button = toolbarItem.view as? NSButton {
 				toolbarItem.toolTip = hideCommand
 				button.image = AppAssets.filterInactive
+				button.state = .off
 			}
 			return false
 		}
@@ -1179,12 +1193,14 @@ private extension MainWindowController {
 			if let toolbarItem = item as? NSToolbarItem, let button = toolbarItem.view as? NSButton {
 				toolbarItem.toolTip = showCommand
 				button.image = AppAssets.filterActive
+				button.state = .on
 			}
 		} else {
 			(item as? NSMenuItem)?.title = hideCommand
 			if let toolbarItem = item as? NSToolbarItem, let button = toolbarItem.view as? NSButton {
 				toolbarItem.toolTip = hideCommand
 				button.image = AppAssets.filterInactive
+				button.state = .off
 			}
 		}
 		
