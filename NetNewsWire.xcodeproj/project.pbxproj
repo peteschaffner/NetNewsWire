@@ -793,6 +793,9 @@
 		B528F81E23333C7E00E735DD /* page.html in Resources */ = {isa = PBXBuildFile; fileRef = B528F81D23333C7E00E735DD /* page.html */; };
 		BDCB516724282C8A00102A80 /* AccountsNewsBlur.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDCB514D24282C8A00102A80 /* AccountsNewsBlur.xib */; };
 		BDCB516824282C8A00102A80 /* AccountsNewsBlur.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDCB514D24282C8A00102A80 /* AccountsNewsBlur.xib */; };
+		C15B7AF22B45A61A00B99B1C /* Pete.nnwtheme in Resources */ = {isa = PBXBuildFile; fileRef = C15B7AF12B45A61A00B99B1C /* Pete.nnwtheme */; };
+		C15B7AF32B45A61A00B99B1C /* Pete.nnwtheme in Resources */ = {isa = PBXBuildFile; fileRef = C15B7AF12B45A61A00B99B1C /* Pete.nnwtheme */; };
+		C15B7AF42B45A61A00B99B1C /* Pete.nnwtheme in Resources */ = {isa = PBXBuildFile; fileRef = C15B7AF12B45A61A00B99B1C /* Pete.nnwtheme */; };
 		C1CF190A2B45520B00692638 /* FootnotePopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1CF19072B45520B00692638 /* FootnotePopover.xib */; };
 		C1CF190B2B45520B00692638 /* FootnotePopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1CF19072B45520B00692638 /* FootnotePopover.xib */; };
 		C1CF190C2B45520B00692638 /* FootnotePopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CF19082B45520B00692638 /* FootnotePopoverViewController.swift */; };
@@ -1513,6 +1516,7 @@
 		B2B8075D239C49D300F191E0 /* RSImage-AppIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RSImage-AppIcons.swift"; sourceTree = "<group>"; };
 		B528F81D23333C7E00E735DD /* page.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = page.html; sourceTree = "<group>"; };
 		BDCB514D24282C8A00102A80 /* AccountsNewsBlur.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountsNewsBlur.xib; sourceTree = "<group>"; };
+		C15B7AF12B45A61A00B99B1C /* Pete.nnwtheme */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Pete.nnwtheme; sourceTree = "<group>"; };
 		C1CF19072B45520B00692638 /* FootnotePopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FootnotePopover.xib; sourceTree = "<group>"; };
 		C1CF19082B45520B00692638 /* FootnotePopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FootnotePopoverViewController.swift; sourceTree = "<group>"; };
 		C1CF19092B45520B00692638 /* NSPopover+Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPopover+Background.swift"; sourceTree = "<group>"; };
@@ -1783,6 +1787,7 @@
 				51077C5327A86C9E000C71DB /* Hyperlegible.nnwtheme */,
 				51DEE81726FBFF84006DAA56 /* Promenade.nnwtheme */,
 				5137C2E326F3F52D009EFEDB /* Sepia.nnwtheme */,
+				C15B7AF12B45A61A00B99B1C /* Pete.nnwtheme */,
 				5127B237222B4849006D641D /* DetailKeyboardShortcuts.plist */,
 				844B5B641FEA11F200C7C76A /* GlobalKeyboardShortcuts.plist */,
 				844B5B681FEA20DF00C7C76A /* SidebarKeyboardShortcuts.plist */,
@@ -3305,6 +3310,7 @@
 				3B826DCD2385C89600FC1ADB /* AccountsFeedWrangler.xib in Resources */,
 				65ED4069235DEF6C0081F399 /* AccountsReaderAPI.xib in Resources */,
 				65ED406A235DEF6C0081F399 /* newsfoot.js in Resources */,
+				C15B7AF32B45A61A00B99B1C /* Pete.nnwtheme in Resources */,
 				5103A9992421643300410853 /* blank.html in Resources */,
 				65ED406B235DEF6C0081F399 /* CrashReporterWindow.xib in Resources */,
 				65ED406C235DEF6C0081F399 /* Credits.rtf in Resources */,
@@ -3357,6 +3363,7 @@
 				84A3EE61223B667F00557320 /* DefaultFeeds.opml in Resources */,
 				B27EEBFB244D15F3000932E6 /* stylesheet.css in Resources */,
 				511D43CF231FA62200FB1562 /* DetailKeyboardShortcuts.plist in Resources */,
+				C15B7AF42B45A61A00B99B1C /* Pete.nnwtheme in Resources */,
 				51A1699A235E10D700EB091F /* Settings.storyboard in Resources */,
 				49F40DF92335B71000552BF4 /* newsfoot.js in Resources */,
 				51F85BEF2272520B00C787DC /* Thanks.rtf in Resources */,
@@ -3405,6 +3412,7 @@
 				5144EA52227B8E4500D19003 /* AccountsFeedbin.xib in Resources */,
 				8405DDA222168920008CE1BF /* TimelineTableView.xib in Resources */,
 				B528F81E23333C7E00E735DD /* page.html in Resources */,
+				C15B7AF22B45A61A00B99B1C /* Pete.nnwtheme in Resources */,
 				8483630E2262A3FE00DA1D35 /* MainWindow.storyboard in Resources */,
 				DFD6AACE27ADE86E00463FAD /* NewsFax.nnwtheme in Resources */,
 				3B826DCB2385C84800FC1ADB /* AccountsFeedWrangler.xib in Resources */,
