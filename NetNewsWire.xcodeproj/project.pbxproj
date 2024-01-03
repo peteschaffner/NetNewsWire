@@ -793,6 +793,12 @@
 		B528F81E23333C7E00E735DD /* page.html in Resources */ = {isa = PBXBuildFile; fileRef = B528F81D23333C7E00E735DD /* page.html */; };
 		BDCB516724282C8A00102A80 /* AccountsNewsBlur.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDCB514D24282C8A00102A80 /* AccountsNewsBlur.xib */; };
 		BDCB516824282C8A00102A80 /* AccountsNewsBlur.xib in Resources */ = {isa = PBXBuildFile; fileRef = BDCB514D24282C8A00102A80 /* AccountsNewsBlur.xib */; };
+		C1CF190A2B45520B00692638 /* FootnotePopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1CF19072B45520B00692638 /* FootnotePopover.xib */; };
+		C1CF190B2B45520B00692638 /* FootnotePopover.xib in Resources */ = {isa = PBXBuildFile; fileRef = C1CF19072B45520B00692638 /* FootnotePopover.xib */; };
+		C1CF190C2B45520B00692638 /* FootnotePopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CF19082B45520B00692638 /* FootnotePopoverViewController.swift */; };
+		C1CF190D2B45520B00692638 /* FootnotePopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CF19082B45520B00692638 /* FootnotePopoverViewController.swift */; };
+		C1CF190E2B45520B00692638 /* NSPopover+Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CF19092B45520B00692638 /* NSPopover+Background.swift */; };
+		C1CF190F2B45520B00692638 /* NSPopover+Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CF19092B45520B00692638 /* NSPopover+Background.swift */; };
 		C5A6ED5223C9AF4300AB6BE2 /* TitleActivityItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A6ED5123C9AF4300AB6BE2 /* TitleActivityItemSource.swift */; };
 		C5A6ED6D23C9B0C800AB6BE2 /* UIActivityViewController-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A6ED6C23C9B0C800AB6BE2 /* UIActivityViewController-Extensions.swift */; };
 		D3555BF524664566005E48C3 /* ArticleSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3555BF324664539005E48C3 /* ArticleSearchBar.swift */; };
@@ -1505,6 +1511,9 @@
 		B2B8075D239C49D300F191E0 /* RSImage-AppIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RSImage-AppIcons.swift"; sourceTree = "<group>"; };
 		B528F81D23333C7E00E735DD /* page.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = page.html; sourceTree = "<group>"; };
 		BDCB514D24282C8A00102A80 /* AccountsNewsBlur.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountsNewsBlur.xib; sourceTree = "<group>"; };
+		C1CF19072B45520B00692638 /* FootnotePopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FootnotePopover.xib; sourceTree = "<group>"; };
+		C1CF19082B45520B00692638 /* FootnotePopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FootnotePopoverViewController.swift; sourceTree = "<group>"; };
+		C1CF19092B45520B00692638 /* NSPopover+Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPopover+Background.swift"; sourceTree = "<group>"; };
 		C5A6ED5123C9AF4300AB6BE2 /* TitleActivityItemSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleActivityItemSource.swift; sourceTree = "<group>"; };
 		C5A6ED6C23C9B0C800AB6BE2 /* UIActivityViewController-Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityViewController-Extensions.swift"; sourceTree = "<group>"; };
 		D3555BF324664539005E48C3 /* ArticleSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleSearchBar.swift; sourceTree = "<group>"; };
@@ -2352,6 +2361,9 @@
 				84E8E0EA202F693600562D8F /* DetailWebView.swift */,
 				84D52E941FE588BB00D14F5B /* DetailStatusBarView.swift */,
 				5141E7552374A2890013FF27 /* DetailIconSchemeHandler.swift */,
+				C1CF19082B45520B00692638 /* FootnotePopoverViewController.swift */,
+				C1CF19092B45520B00692638 /* NSPopover+Background.swift */,
+				C1CF19072B45520B00692638 /* FootnotePopover.xib */,
 				5103A9972421643300410853 /* blank.html */,
 				B528F81D23333C7E00E735DD /* page.html */,
 				5142194A2353C1CF00E07E2C /* main_mac.js */,
@@ -3258,6 +3270,7 @@
 				65ED4050235DEF6C0081F399 /* DetailKeyboardShortcuts.plist in Resources */,
 				65ED4051235DEF6C0081F399 /* TimelineKeyboardShortcuts.plist in Resources */,
 				65ED4052235DEF6C0081F399 /* template.html in Resources */,
+				C1CF190B2B45520B00692638 /* FootnotePopover.xib in Resources */,
 				65ED4054235DEF6C0081F399 /* Main.storyboard in Resources */,
 				5137C2E526F3F52D009EFEDB /* Sepia.nnwtheme in Resources */,
 				65ED4056235DEF6C0081F399 /* NetNewsWire.sdef in Resources */,
@@ -3375,6 +3388,7 @@
 				844B5B691FEA20DF00C7C76A /* SidebarKeyboardShortcuts.plist in Resources */,
 				5103A9F4242258C600410853 /* AccountsAddCloudKit.xib in Resources */,
 				51077C5427A86C9E000C71DB /* Hyperlegible.nnwtheme in Resources */,
+				C1CF190A2B45520B00692638 /* FootnotePopover.xib in Resources */,
 				84A3EE5F223B667F00557320 /* DefaultFeeds.opml in Resources */,
 				51C03081257D815A00609262 /* UnifiedWindow.storyboard in Resources */,
 				849C78902362AAFC009A71E4 /* ExportOPMLSheet.xib in Resources */,
@@ -3795,6 +3809,7 @@
 				65ED3FE0235DEF6C0081F399 /* PreferencesControlsBackgroundView.swift in Sources */,
 				65ED3FE1235DEF6C0081F399 /* MarkCommandValidationStatus.swift in Sources */,
 				65ED3FE2235DEF6C0081F399 /* ArticlePasteboardWriter.swift in Sources */,
+				C1CF190D2B45520B00692638 /* FootnotePopoverViewController.swift in Sources */,
 				65ED3FE3235DEF6C0081F399 /* ArticleUtilities.swift in Sources */,
 				65ED3FE4235DEF6C0081F399 /* NNW3OpenPanelAccessoryViewController.swift in Sources */,
 				65ED3FE5235DEF6C0081F399 /* DefaultFeedsImporter.swift in Sources */,
@@ -3823,6 +3838,7 @@
 				1710B9142552354E00679C0D /* AddAccountHelpView.swift in Sources */,
 				65ED3FFA235DEF6C0081F399 /* WebFeedInspectorViewController.swift in Sources */,
 				65ED3FFB235DEF6C0081F399 /* AccountsReaderAPIWindowController.swift in Sources */,
+				C1CF190F2B45520B00692638 /* NSPopover+Background.swift in Sources */,
 				65ED3FFC235DEF6C0081F399 /* AccountsAddLocalWindowController.swift in Sources */,
 				65ED3FFD235DEF6C0081F399 /* PasteboardFolder.swift in Sources */,
 				51386A8F25673277005F3762 /* AccountCell.swift in Sources */,
@@ -4114,6 +4130,7 @@
 				842E45DD1ED8C54B000A8B52 /* Browser.swift in Sources */,
 				84216D0322128B9D0049B9B9 /* DetailWebViewController.swift in Sources */,
 				17071EF026F8137400F5E71D /* ArticleTheme+Notifications.swift in Sources */,
+				C1CF190C2B45520B00692638 /* FootnotePopoverViewController.swift in Sources */,
 				8444C8F21FED81840051386C /* OPMLExporter.swift in Sources */,
 				849A975E1ED9EB72007D329B /* MainWindowController.swift in Sources */,
 				84F2D53A1FC2308B00998D64 /* UnreadFeed.swift in Sources */,
@@ -4132,6 +4149,7 @@
 				D57BE6E0204CD35F00D11AAC /* NSScriptCommand+NetNewsWire.swift in Sources */,
 				D553738B20186C20006D8857 /* Article+Scriptability.swift in Sources */,
 				845EE7C11FC2488C00854A1F /* SmartFeed.swift in Sources */,
+				C1CF190E2B45520B00692638 /* NSPopover+Background.swift in Sources */,
 				51A9A5F32380DE530033AADF /* AddWebFeedDefaultContainer.swift in Sources */,
 				84702AA41FA27AC0006B8943 /* MarkStatusCommand.swift in Sources */,
 				D5907D7F2004AC00005947E5 /* NSApplication+Scriptability.swift in Sources */,
