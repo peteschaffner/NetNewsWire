@@ -28,10 +28,6 @@ class TimelineTableView: NSTableView {
 
 	// MARK: - NSView
 
-	override var isOpaque: Bool {
-		return true
-	}
-	
 	override func viewWillStartLiveResize() {
 		if let scrollView = self.enclosingScrollView {
 			scrollView.hasVerticalScroller = false
