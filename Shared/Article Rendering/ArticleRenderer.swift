@@ -110,12 +110,11 @@ struct ArticleRenderer {
 		self.extractedArticle = extractedArticle
 		self.articleTheme = theme
 		self.title = article?.sanitizedTitle() ?? ""
+		self.baseURL = article?.baseURL?.absoluteString
 		if let content = extractedArticle?.content {
 			self.body = content
-			self.baseURL = extractedArticle?.url
 		} else {
 			self.body = article?.body ?? ""
-			self.baseURL = article?.baseURL?.absoluteString
 		}
 	}
 
@@ -161,7 +160,7 @@ private extension ArticleRenderer {
 	}
 
 	private var loadingHTML: String {
-		let body = "<h3 class='systemMessage'>Loading...</h3>"
+		let body = "<h3 class='systemMessage'>Loading…</h3>"
 		return body
 	}
 

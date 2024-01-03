@@ -16,30 +16,38 @@ enum ArticleExtractorButtonState {
 }
 
 class ArticleExtractorButton: NSButton {
-	
-	private var animatedLayer: CALayer?
-	
+
+	private var spinner: NSProgressIndicator!
+
 	var buttonState: ArticleExtractorButtonState = .off {
 		didSet {
 			if buttonState != oldValue {
 				switch buttonState {
 				case .error:
-					stripAnimatedSublayer()
-					image = AppAssets.articleExtractorError
+					spinner.isHidden = true
+					spinner.stopAnimation(nil)
+					self.image = AppAssets.articleExtractorError
+					self.state = .off
 				case .animated:
-					image = nil
-					needsLayout = true
+					spinner.isHidden = false
+					spinner.startAnimation(nil)
+					self.image = nil
+					self.state = .on
 				case .on:
-					stripAnimatedSublayer()
-					image = AppAssets.articleExtractorOn
+					spinner.isHidden = true
+					spinner.stopAnimation(nil)
+					self.image = AppAssets.articleExtractorOn
+					self.state = .on
 				case .off:
-					stripAnimatedSublayer()
-					image = AppAssets.articleExtractorOff
+					spinner.isHidden = true
+					spinner.stopAnimation(nil)
+					self.image = AppAssets.articleExtractorOff
+					self.state = .off
 				}
 			}
 		}
 	}
-	
+
 	override func accessibilityLabel() -> String? {
 		switch buttonState {
 		case .error:
@@ -57,53 +65,26 @@ class ArticleExtractorButton: NSButton {
 		super.init(frame: frameRect)
 		commonInit()
 	}
-	
+
 	required init?(coder: NSCoder) {
 		super.init(coder: coder)
 		commonInit()
 	}
-	
+
 	private func commonInit() {
-		wantsLayer = true
-		bezelStyle = .texturedRounded
-		image = AppAssets.articleExtractorOff
-		imageScaling = .scaleProportionallyDown
-		widthAnchor.constraint(equalTo: heightAnchor).isActive = true
+		spinner = NSProgressIndicator(frame: self.bounds)
+		spinner.style = .spinning
+		spinner.controlSize = .small
+		self.addSubview(spinner)
+		spinner.translatesAutoresizingMaskIntoConstraints = false
+		spinner.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+		spinner.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+		spinner.isHidden = true
+
+		self.bezelStyle = .texturedRounded
+		self.setButtonType(.toggle)
+		self.image = AppAssets.articleExtractorOff
+		self.imageScaling = .scaleProportionallyDown
 	}
-	
-	override func layout() {
-		super.layout()
-		guard case .animated = buttonState else {
-			return
-		}
-		stripAnimatedSublayer()
-		addAnimatedSublayer(to: layer!)
-	}
-	
-	private func stripAnimatedSublayer() {
-		animatedLayer?.removeFromSuperlayer()
-	}
-	
-	private func addAnimatedSublayer(to hostedLayer: CALayer) {
-		let image1 = AppAssets.articleExtractorOff.tinted(with: NSColor.controlTextColor)
-		let image2 = AppAssets.articleExtractorOn.tinted(with: NSColor.controlTextColor)
-		let images = [image1, image2, image1]
-		
-		animatedLayer = CALayer()
-		let imageSize = AppAssets.articleExtractorOff.size
-		animatedLayer!.bounds = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
-		animatedLayer!.position = CGPoint(x: bounds.midX, y: bounds.midY)
-		
-		hostedLayer.addSublayer(animatedLayer!)
-		
-		let animation = CAKeyframeAnimation(keyPath: "contents")
-		animation.calculationMode = CAAnimationCalculationMode.linear
-		animation.keyTimes = [0, 0.5, 1]
-		animation.duration = 2
-		animation.values = images
-		animation.repeatCount = HUGE
-		
-		animatedLayer!.add(animation, forKey: "contents")
-	}
-	
+
 }

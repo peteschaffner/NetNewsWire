@@ -799,6 +799,8 @@
 		C1CF190D2B45520B00692638 /* FootnotePopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CF19082B45520B00692638 /* FootnotePopoverViewController.swift */; };
 		C1CF190E2B45520B00692638 /* NSPopover+Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CF19092B45520B00692638 /* NSPopover+Background.swift */; };
 		C1CF190F2B45520B00692638 /* NSPopover+Background.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1CF19092B45520B00692638 /* NSPopover+Background.swift */; };
+		C1CF19112B45539700692638 /* Readability.js in Resources */ = {isa = PBXBuildFile; fileRef = C1CF19102B45539700692638 /* Readability.js */; };
+		C1CF19122B45539700692638 /* Readability.js in Resources */ = {isa = PBXBuildFile; fileRef = C1CF19102B45539700692638 /* Readability.js */; };
 		C5A6ED5223C9AF4300AB6BE2 /* TitleActivityItemSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A6ED5123C9AF4300AB6BE2 /* TitleActivityItemSource.swift */; };
 		C5A6ED6D23C9B0C800AB6BE2 /* UIActivityViewController-Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5A6ED6C23C9B0C800AB6BE2 /* UIActivityViewController-Extensions.swift */; };
 		D3555BF524664566005E48C3 /* ArticleSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3555BF324664539005E48C3 /* ArticleSearchBar.swift */; };
@@ -1514,6 +1516,7 @@
 		C1CF19072B45520B00692638 /* FootnotePopover.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = FootnotePopover.xib; sourceTree = "<group>"; };
 		C1CF19082B45520B00692638 /* FootnotePopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FootnotePopoverViewController.swift; sourceTree = "<group>"; };
 		C1CF19092B45520B00692638 /* NSPopover+Background.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSPopover+Background.swift"; sourceTree = "<group>"; };
+		C1CF19102B45539700692638 /* Readability.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = Readability.js; sourceTree = "<group>"; };
 		C5A6ED5123C9AF4300AB6BE2 /* TitleActivityItemSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleActivityItemSource.swift; sourceTree = "<group>"; };
 		C5A6ED6C23C9B0C800AB6BE2 /* UIActivityViewController-Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityViewController-Extensions.swift"; sourceTree = "<group>"; };
 		D3555BF324664539005E48C3 /* ArticleSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleSearchBar.swift; sourceTree = "<group>"; };
@@ -2109,6 +2112,7 @@
 			children = (
 				51FA73A32332BE110090D516 /* ArticleExtractor.swift */,
 				51FA73A62332BE880090D516 /* ExtractedArticle.swift */,
+				C1CF19102B45539700692638 /* Readability.js */,
 			);
 			path = "Article Extractor";
 			sourceTree = "<group>";
@@ -3276,6 +3280,7 @@
 				65ED4056235DEF6C0081F399 /* NetNewsWire.sdef in Resources */,
 				65ED4057235DEF6C0081F399 /* AccountsDetail.xib in Resources */,
 				65ED4058235DEF6C0081F399 /* main.js in Resources */,
+				C1CF19122B45539700692638 /* Readability.js in Resources */,
 				65ED40A1235DEFF00081F399 /* container-migration.plist in Resources */,
 				65ED4059235DEF6C0081F399 /* AccountsAddLocal.xib in Resources */,
 				65ED405A235DEF6C0081F399 /* main_mac.js in Resources */,
@@ -3386,6 +3391,7 @@
 				B27EEBF9244D15F3000932E6 /* stylesheet.css in Resources */,
 				5144EA3B227A379E00D19003 /* ImportOPMLSheet.xib in Resources */,
 				844B5B691FEA20DF00C7C76A /* SidebarKeyboardShortcuts.plist in Resources */,
+				C1CF19112B45539700692638 /* Readability.js in Resources */,
 				5103A9F4242258C600410853 /* AccountsAddCloudKit.xib in Resources */,
 				51077C5427A86C9E000C71DB /* Hyperlegible.nnwtheme in Resources */,
 				C1CF190A2B45520B00692638 /* FootnotePopover.xib in Resources */,
