@@ -149,7 +149,7 @@ struct AppAssets {
 	
 	static var masterFolderImage: IconImage {
 		let image = NSImage(systemSymbolName: "folder", accessibilityDescription: nil)!
-		let preferredColor = NSColor(named: "AccentColor")!
+		let preferredColor = NSColor.controlAccentColor
 		return IconImage(image, isSymbol: true, isBackgroundSupressed: true, preferredColor: preferredColor.cgColor)
 	}
 
