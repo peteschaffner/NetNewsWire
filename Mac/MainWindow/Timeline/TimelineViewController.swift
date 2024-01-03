@@ -118,7 +118,7 @@ final class TimelineViewController: NSViewController, UndoableCommandRunner, Unr
 							return .byline
 						}
 					}
-					return .none
+					return .feed
 				}()
 			} else {
 				showFeedNames = .feed
@@ -211,7 +211,9 @@ final class TimelineViewController: NSViewController, UndoableCommandRunner, Unr
 		if #available(macOS 11.0, *) {
 			tableView.style = .inset
 		}
-		
+
+		tableView.gridStyleMask = .solidHorizontalGridLineMask
+
 		if !didRegisterForNotifications {
 			NotificationCenter.default.addObserver(self, selector: #selector(statusesDidChange(_:)), name: .StatusesDidChange, object: nil)
 			NotificationCenter.default.addObserver(self, selector: #selector(webFeedIconDidBecomeAvailable(_:)), name: .WebFeedIconDidBecomeAvailable, object: nil)
@@ -983,7 +985,7 @@ private extension TimelineViewController {
 
 	func updateShowIcons() {
 		if showFeedNames == .feed {
-			self.showIcons = true
+			self.showIcons = false
 			return
 		}
 
@@ -996,7 +998,7 @@ private extension TimelineViewController {
 			if let authors = article.authors {
 				for author in authors {
 					if author.avatarURL != nil {
-						self.showIcons = true
+						self.showIcons = false
 						return
 					}
 				}
