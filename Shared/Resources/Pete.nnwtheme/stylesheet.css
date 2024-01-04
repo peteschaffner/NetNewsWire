@@ -261,32 +261,6 @@ blockquote {
 	color: var(--blockquote-text-color);
 }
 
-body a.footnote,
-body a.footnote:visited {
-	background: #aaa;
-	color: white;
-	transition: background-color 200ms ease-out;
-}
-
-a.footnote:hover {
-	background: #666;
-	transition: background-color 200ms ease-out;
-}
-
-@media screen and (prefers-color-scheme: dark) {
-	body a.footnote,
-	body a.footnote:visited {
-		background: #aaa;
-		color: white;
-		transition: background-color 200ms ease-out;
-	}
-
-	a.footnote:hover {
-		background: #666;
-		transition: background-color 200ms ease-out;
-	}
-}
-
 .smallText {
 	font-size: 14px;
 }

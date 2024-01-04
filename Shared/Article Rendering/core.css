@@ -122,16 +122,3 @@ img[src*="share-buttons"] {
 sup[id^='fn'] {
 	vertical-align: baseline;
 }
-
-a.footnote {
-	display: inline-block;
-	text-decoration: none;
-	padding: 0.05em 0.75em;
-	border-radius: 1em;
-	min-width: 1em;
-	text-align: center;
-	font-size: 0.8em;
-	line-height: 1em;
-	position:relative;
-	top: -0.1em;
-}

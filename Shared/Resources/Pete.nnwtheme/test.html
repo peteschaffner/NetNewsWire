@@ -1,10 +1,424 @@
 <html dir="auto"><head>
-		<meta charset="utf-8">
-		<title>Building Large Scale Apps Swiftui</title>
-		<link href="./stylesheet.css" rel="stylesheet" />
-		<base href="https://peteschaffner.com/reading-list">
+	<link href="./stylesheet.css" rel="stylesheet" />
+	<meta charset="utf-8">
+		<title>AppKit vs SwiftUI: Stable vs Shiny</title>
+		<style>
+			/* This is the activity indicator (currently iOS only) that is used while image zooming */
+
+.activityIndicatorWrap {
+		position: relative;
+}
+
+.activityIndicator {
+		z-index: 1;
+		width: 64px;
+		height: 64px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+}
+
+/* see removeWpSmiley; this rule is kept in case a wp-smiley is encountered without alt text */
+
+.wp-smiley {
+		height: 1em;
+		max-height: 1em;
+ }
+
+/* Hide the external link at the bottom of Daring Fireball posts */
+
+.x-netnewswire-hide {
+	display: none;
+}
+
+/*Block ads and junk*/
+
+iframe[src*="feedads"],
+iframe[src*="doubleclick"],
+iframe[src*="plusone.google"] {
+	display: none !important;
+}
+
+a[href*=".ads."],
+a[href*="feedads"],
+a[href*="doubleclick"],
+a[href*="//ads."],
+a[href*="api.tweetmeme"],
+a[href*="delicious.com/post?"],
+a[href*="digg.com/submit?"],
+a[href*="google.com/bookmarks/mark?"],
+a[href*="posterous.com/share?"],
+a[href*="tumblr.com/share?"],
+a[href*="linkedin.com/shareArticle?"],
+a[href*="facebook.com/share.php?"],
+a[href*="http://twitter.com/home?"],
+a[href*="addtoany.com/share_save"] {
+	display: none !important;
+}
+
+img[src*=".ads."],
+img[src*="//ads."],
+img[src*="doubleclick"],
+img[src*="feedads"],
+img[src*="feedburner"],
+img[src*="feedblitz"],
+img[src*="share-buttons"] {
+	display: none !important;
+}
+
+/* Newsfoot specific styles. Structural styles come first, theme styles second */
+
+.newsfoot-footnote-container {
+	position: relative;
+	display: inline-block;
+	z-index: 9999;
+}
+
+.newsfoot-footnote-popover {
+	position: absolute;
+	display: block;
+	padding: 0em 1em;
+	margin: 1em;
+	top: 0.75em;
+	max-width: none;
+	border-radius: 0.3em;
+	box-sizing: border-box;
+}
+
+.newsfoot-footnote-popover {
+	left: calc(-1 * (50vw - 1em));
+	right: calc(-1 * (50vw - 1em));
+}
+
+.newsfoot-footnote-popover-arrow {
+	content: '';
+	display: block;
+	width: 1em;
+	position: absolute;
+	top: -0.5em;
+	left: calc(50% - 0.5em);
+	height: 1em !important;
+	transform: rotate(45deg);
+	z-index:0;
+}
+
+.newsfoot-footnote-popover-inner {
+	border-radius: calc(0.3em - 1px);
+	padding: 1em;
+	position: relative;
+	z-index: 1;
+}
+
+.newsfoot-footnote-popover-inner :first-child {
+	margin-top: 0;
+}
+.newsfoot-footnote-popover-inner :last-child {
+	margin-bottom: 0;
+}
+
+.newsfoot-footnote-popover .reversefootnote,
+.newsfoot-footnote-popover .footnoteBackLink,
+.newsfoot-footnote-popover .footnote-return,
+.newsfoot-footnote-popover a[href*='#fn'] {
+	display: none;
+}
+
+sup[id^='fn'] {
+	vertical-align: baseline;
+}
+
+:root {
+	color-scheme: light dark;
+	--text-color: rgba(0, 0, 0, 0.9);
+	--accent-color: #0068DA;
+	--code-background-color: rgba(0, 0, 0, 0.04);
+	--code-text-color: rgba(0, 0, 0, 0.8);
+	--blockquote-ribbon-color: rgba(0, 0, 0, 0.1);
+	--blockquote-text-color: rgba(0, 0, 0, 0.6);
+	--system-message-color: #cbcbcb;
+	--article-date-color: rgba(0, 0, 0, 0.3);
+	--table-border-color: rgba(0, 0, 0, 0.1);
+}
+
+@media(prefers-color-scheme: dark) {
+	:root {
+		--text-color: rgba(255, 255, 255, 0.8);
+		--accent-color: #439CFF;
+		--code-background-color: rgba(255, 255, 255, 0.1);
+		--code-text-color: rgba(255, 255, 255, 0.8);
+		--blockquote-ribbon-color: rgba(255, 255, 255, 0.2);
+		--blockquote-text-color: rgba(255, 255, 255, 0.6);
+		--system-message-color: #5f5f5f;
+		--article-date-color: rgba(255, 255, 255, 0.3);
+		--table-border-color: rgba(255, 255, 255, 0.1);
+	}
+}
+
+body {
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 43px;
+	margin-bottom: 64px;
+
+	padding-left: 48px;
+	padding-right: 48px;
+
+	word-wrap: break-word;
+	max-width: 36em;
+
+	font-family: -apple-system;
+	color: var(--text-color);
+}
+
+body a, body a:visited, body a * {
+	color: var(--accent-color);
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.systemMessage {
+	position: absolute;
+	top: 45%;
+	left: 50%;
+	transform: translateX(-55%) translateY(-50%);
+	-webkit-user-select: none;
+	cursor: default;
+}
+
+body > .systemMessage {
+	color: var(--system-message-color);
+}
+
+.rightAlign {
+	text-align: end;
+}
+
+.leftAlign {
+	text-align: start;
+}
+
+.articleTitle a:link, .articleTitle a:visited {
+	color: var(--text-color);
+	margin-top: 26px;
+}
+
+.articleDateline, .articleDatelineTitle {
+	margin-bottom: 5px;
+}
+
+.articleDateline a:link, .articleDateline a:visited {
+	color: var(--article-date-color);
+}
+
+.articleDatelineTitle a:link, .articleDatelineTitle a:visited {
+	color: var(--text-color);
+}
+
+.externalLink {
+	margin-bottom: 5px;
+	font-style: italic;
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.articleBody {
+	margin-top: 20px;
+	line-height: 1.75em;
+}
+
+h1 {
+	line-height: 1.15em;
+	font-weight: bold;
+	padding-bottom: 0;
+	margin-bottom: 5px;
+	font-weight: 800;
+}
+
+pre {
+	padding: 10px;
+	border-radius: 6px;
+	max-width: 100%;
+	margin: 0;
+	overflow: auto;
+	overflow-y: hidden;
+	word-wrap: normal;
+	word-break: normal;
+	line-height: 1.4286em;
+}
+
+pre, :not(pre) > code {
+	background-color: var(--code-background-color);
+}
+
+:not(pre) > code {
+	border-radius: 4px;
+	padding: 1px 4px;
+}
+
+code, pre {
+	color: var(--code-text-color);
+	font-family: "SF Mono", Menlo, "Courier New", Courier, monospace;
+	font-size: 0.97em;
+	-webkit-hyphens: none;
+}
+
+pre code {
+	letter-spacing: -.027em;
+}
+
+.nnw-overflow {
+	overflow-x: auto;
+}
+
+/*
+ Instead of the last-child bits, border-collapse: collapse
+ could have been used. However, then the inter-cell borders
+ overlap the table border, which looks bad.
+ */
+.nnw-overflow table {
+	margin-bottom: 1px;
+	border-spacing: 0;
+	border: 1px solid var(--table-border-color);
+	font-size: inherit;
+}
+
+.nnw-overflow table table {
+	margin-bottom: 0;
+	border: none;
+}
+
+.nnw-overflow td, .nnw-overflow th {
+	-webkit-hyphens: none;
+	word-break: normal;
+	border: 1px solid var(--table-border-color);
+	border-top: none;
+	border-left: none;
+	padding: 5px;
+}
+
+.nnw-overflow tr :matches(td, th):last-child {
+	border-right: none;
+}
+
+.nnw-overflow :matches(thead, tbody, tfoot):last-child > tr:last-child :matches(td, th) {
+	border-bottom: none;
+}
+
+.nnw-overflow td pre {
+	border: none;
+	padding: 0;
+}
+
+.nnw-overflow table[border="0"] {
+	border-width: 0;
+}
+
+figcaption {
+	margin-top: 10px;
+	color: var(--article-date-color);
+	font-style: italic;
+}
+
+img, figure, video, div, object {
+	max-width: 100%;
+	height: auto !important;
+	margin: 0 auto;
+}
+
+iframe {
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+iframe.nnw-constrained {
+	max-height: 50vw;
+}
+
+figure {
+	margin-bottom: 1em;
+	margin-top: 1em;
+}
+
+figcaption {
+	font-size: 14px;
+	line-height: 1.3em;
+}
+
+sup {
+	vertical-align: top;
+	position: relative;
+	bottom: 0.2rem;
+}
+
+sub {
+	vertical-align: bottom;
+	position: relative;
+	top: 0.2rem;
+}
+
+hr {
+	border: 1.5px solid var(--table-border-color);
+}
+
+.iframeWrap {
+	position: relative;
+	display: block;
+	padding-top: 56.25%;
+}
+
+.iframeWrap iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100% !important;
+	width: 100% !important;
+}
+
+blockquote {
+	margin-inline-start: 0;
+	margin-inline-end: 0;
+	padding-inline-start: 15px;
+	border-inline-start: 3px solid var(--blockquote-ribbon-color);
+	color: var(--blockquote-text-color);
+}
+
+.smallText {
+	font-size: 14px;
+}
+
+.mediumText {
+	font-size: 16px;
+}
+
+.largeText {
+	font-size: 18px;
+}
+
+.xlargeText {
+	font-size: 20px;
+}
+
+.xxlargeText {
+	font-size: 22px;
+}
+
+.feedbin--article-wrap {
+	border-top: 1px solid var(--code-background-color);
+}
+
+		</style>
+		<base href="https://milen.me/writings/">
 	</head>
-	<body style="overflow: visible;">
+	<body>
 		<!-- Template Variables
 
 title: The title of the article
@@ -37,989 +451,209 @@ body: The body of the article.
 
 -->
 
-<header class="headerContainer" style="display: none;">
-	<table cellpadding="0" cellspacing="0" border="0" class="headerTable">
-	<tbody><tr>
-		<td class="header leftAlign"><a class="feedlink" href="https://peteschaffner.com/reading-list">📖 Reading List</a><br></td>
-		<td class="header rightAlign avatar"><img id="nnwImageIcon" src="nnwImageIcon:44312?1704297459659" height="48" width="48"></td>
-	</tr>
-	</tbody></table>
-</header>
-
 <article>
-<div class="articleTitle"><h1><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html">Building Large Scale Apps Swiftui</a></h1></div>
-<div class="articleDateline"><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html">Dec 22, 2023 at 21:01</a></div>
-<div class="externalLink"> <a href=""></a></div>
-<div id="bodyContainer" class="articleBody smallText"><p>Updated (08/31/2023)</p> <ul> <li>Added “Problems with MVVM with SwiftUI”.</li> <li>Updated “Understanding the MV Pattern”</li> <li>Updated “Navigation”</li> <li>Updated “Displaying Errors”</li> <li>Added “Formatting”</li> </ul> <p>Software architecture is always a topic for hot debate, specially when there are so many different choices. For the last 8-12 months, I have been experimenting with MV pattern to build client/server apps and wrote about it in my original article <a href="https://azamsharp.com/2022/10/06/practical-mv-pattern-crud.html" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">SwiftUI Architecture - A Complete Guide to MV Pattern Approach</a>. In this article, I will discuss how MV pattern can be applied to build large scale client/server applications.</p> <blockquote> <p>Architecture and patterns depends on the type of application you are building. No single architecture will work in all scenarios. Choose the best architecture suitable for your application needs.</p> </blockquote> <p>abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz</p> <ul> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#modular-architecture" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Modular Architecture</a></li> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#problems-with-mvvm-with-swiftui" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Problems with MVVM with SwiftUI</a></li> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#understanding-the-mv-pattern" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Understanding the MV Pattern</a></li> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#screens-vs-views" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Screens vs Views</a></li> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#multiple-aggregate-models" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Multiple Aggregate Models</a></li> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#view-specific-logic" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">View Specific Logic</a></li> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#validation" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Validation</a></li> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#navigation" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Navigation</a></li> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#displaying-errors" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Displaying Errors</a></li> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#grouping-view-events" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Grouping View Events</a></li> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#formatting" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Formatting</a></li> <li><a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#testing" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Testing</a></li> </ul> <p><a href="https://azamsharp.teachable.com/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer"><img src="https://azamsharp.com/images/ITeachOnTeachable.png" alt="I Teach on Teachable" loading="lazy"></a></p> <h2 id="modular-architecture">Modular Architecture</h2> <p>Modular architecture in software refers to the design and organization of software systems into small, self contained modules or components. These modules can be tested and maintained independently of one another. Each module serves a specific purpose and solve a specific business requirement.</p> <p>Modular architecture also provides advantages when working on large projects consisting of multiple teams. Each team can work on a particular module, without interfering with each other.</p> <blockquote> <p>If you are working on a module that will be consumed or used by other teams then make sure that you are communicating with them and not creating the module in complete isolation. A lot of problems in software development exists solely because of lack of communication between teams.</p> </blockquote> <p>Modularity can be achieved in several different ways. You can expose each module as a package (SPM), which can be imported into different applications. Modularity can also be achieved by structuring your app based on specific grouping or folder structure. Keep in mind that when using folders for modularity you have to pay special attention to separation of concerns and single responsibility principles.</p> <blockquote> <p>The focus of this article is not Swift Package Manager, but how to achieve modularity by breaking the app based on the bounded context of the application. <strong>Swift Package Manager can be used to package those dependencies into reusable modules.</strong></p> </blockquote> <h2 id="problems-with-mvvm-with-swiftui">Problems with MVVM with SwiftUI</h2> <p>MVVM pattern originated from <a href="https://martinfowler.com/eaaDev/PresentationModel.html" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Presentation Model</a> architecture, which is known as Application Model to Visual Works Smalltalk users. The main idea behind the Presentation Model is that the state and the behavior of the view is pulled out to its own model. The Presentation Model communicates with the business logic layer and provides the data to the view. The view performs two way communication with the Presentation Model in which, the data can flow from the view to the Presentation Model and vice versa.</p> <p>The main motivation for the Presentation Model is to provide an interface to the view so it can only get the data it needs, without directly dealing with the complicated business logic layer. Martin Fowler mentioned that one of the annoyances of Presentation Model is to write the synchronization code (binding) between the Presentation Model and the view. This was later resolved when Microsoft introduced WPF (Windows Presentation Foundation) framework. Windows Presentation Foundation consisted of built-in binding between the view (XAML) and view models (C#). Microsoft started calling it MVVM (Model View View Model).</p> <p>In the conventional MVVM pattern, alongside the creation of a new view designed to function as a screen, a corresponding view model is also crafted in parallel. The view model’s role is to manage bindings, handle network operations (using a network layer), manage validations, among other tasks. Imagine an application focused on presenting a list of movies from an API, affording users the ability to append new movies, and exhibiting comprehensive movie details. To architect such an application adhering to the MVVM pattern, you may end up with the following structure.</p> <div class="nnw-overflow"><table> <thead> <tr> <th>View</th> <th>View Model</th> </tr> </thead>  <tbody><tr> <td>MovieListView</td> <td>MovieListViewModel</td> </tr> <tr> <td>AddMovieView</td> <td>AddMovieViewModel</td> </tr> <tr> <td>MovieDetailView</td> <td>MovieDetailViewModel</td> </tr>  </tbody></table></div> <p>Each view is represented by its own view model. Consider an application that consists of 20+ screens, you will end up with 20+ view models. A typical view model can consists of networking code (through a networking layer), UI validation and data transformation code. Each of these view models conforms to <code>ObservableObject</code> protocol. The main purpose of <code>ObservableObject</code> protocol is to define a new source of truth. Source of truth is one of the most important concepts in SwiftUI as it is responsible for keeping the data and the view in-sync. In a client/server application, source of truth is the server. So, if the source of truth is the same, why are we creating new source of truths for each view by introducing a view model by conforming to <code>ObservableObject</code> protocol.</p> <blockquote> <p>This does not imply that you have to restrict yourself to just one <code>ObservableObject</code> or source of truth for your entire application. While you can certainly incorporate multiple ObservableObjects into your application, their introduction should not be solely driven by the inclusion of a new view. The primary motivation behind introducing a new ObservableObject should stem from the integration of a new source of truth. Furthermore, you’ll come to understand that there are instances where you’ll introduce ObservableObjects based on the bounded context of the application. This is covered later in this article.</p> </blockquote> <p>Another concerns arises from the fact that in a client/server application, most of these view models will need to communicate with the server. So, if you have a dozen screens and each screen is accompanied with a designated view model then it means you need to inject the networking layer to each of those view models using the principles of dependency injection. This can result in the following implementations:</p> <pre><code>struct MoviesApp: App {
-		var body: some Scene {
-				// httpClient can take HTTPClientProtocol
-				MovieListView(vm: MovieListViewModel(httpClient: HTTPClient()))
-		}
-}
-</code></pre> <p><code>MovieListView</code> depends on <code>MovieListViewModel</code> which depends on <code>HTTPClient</code>. The main issue is not the dependency injection but that you have to do this for every view that consists of a view model and wants to communicate with the server. Consider repeating the same steps for <code>AddMovieView</code> and <code>MovieDetailView</code>. This can make your code extremely hard to understand and with each <code>ObservableObject</code> you have created a new source of truth. With dozens of sources of truth, it becomes hard to manage and share state between different views in a client/server applications.</p> <p>But the most important point is that the functionality offered by a view model is already baked into the view. The primary responsibility of a view model is to support binding. This is already possible inside the view through the use of <code>@State</code>, <code>@Binding</code>, <code>@EnvironmentObject</code> property wrappers.</p> <blockquote> <p>It’s important to reiterate that this does not imply a shift towards placing all elements within a view. The integration of an <code>ObservableObject</code> is warranted when a new source of truth emerges. However, the inclusion of an <code>ObservableObject</code> shouldn’t be prompted solely by the addition of a new view. Consider an example of <code>LocationManager</code>. The purpose of a <code>LocationManager</code> is to provide the user with a new location, region, coordinates etc. This is a good candidate for <code>ObservableObject</code>.</p> </blockquote> <p>Now, let’s move our focus to the view. I strongly believe that Apple did a disservice to the iOS community by calling it a view. They should have called it a component or something similar. The word view entails that it is a visual only component like HTML in web development or XAML in WPF. But that is not the case. The view in SwiftUI is the return from the <code>body</code> property. Even that is not an actual view but just the declaration of the view.</p> <p>SwiftUI views are mapped to the UIView counter parts and then rendered on the screen. SwiftUI views are just basic value type structs. They have no knowledge on how to paint pixels on the screen. SwiftUI uses the declaration of the views to render actual UIViews. Below you can find some common mapping from SwiftUI views to UIKit views:</p> <div class="nnw-overflow"><table> <thead> <tr> <th>SwiftUI View</th> <th>UIView</th> </tr> </thead>  <tbody><tr> <td>List</td> <td>UICollectionView</td> </tr> <tr> <td>Text, Button</td> <td>CGDrawingView</td> </tr> <tr> <td>TextField</td> <td>UITextField</td> </tr>  </tbody></table></div> <p>All this mapping is hidden from the developers but you can always look at the inner details through the view debugging feature in Xcode. Below you can see through view debugging that List in SwiftUI maps to UICollectionView.</p> <figure><img src="https://azamsharp.com/images/view-debugging.png" alt="View Debugging" loading="lazy"><figcaption>Testing</figcaption></figure> <p>The views in SwiftUI, reminds me of ReactJS JSX syntax. Let’s take a look at a very small example.</p> <pre><code>function App() {
-		return (
-				&lt;div&gt;
-						&lt;h1&gt;Hello World&lt;/h1&gt;
-						&lt;button&gt;Save&lt;/button&gt;
-				&lt;/div&gt;
-		)
-}
-</code></pre> <p>In the above ReactJS code, we have created a functional component called <code>App</code>. The App component returns a <code>&lt;div&gt;</code> element containing a <code>&lt;h1&gt;</code> and <code>&lt;button&gt;</code>. The thing to notice here is that those are not actual HTML elements. Those are virtual DOM (Document Object Model) elements managed by React framework. The main reason is that React needs to track changes to those elements so it can only render, what has changed. Once React finds out the changed elements using the diffing process, those virtual DOM elements are used to render real HTML elements on the screen.</p> <p>SwiftUI uses the same concepts internally. The views in the body property are not actual views but the declaration of views. Eventually, those views gets converted to real views and then displayed on the screen. John Sundell also talked about it in his article <a href="https://www.swiftbysundell.com/articles/swiftui-views-versus-modifiers/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">SwiftUI views versus modifiers</a>.</p> <p>If you are interested in learning more about the concept of virtual DOM then check out this talk title <a href="https://youtu.be/GW0rj4sNH2w?t=301" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Tom Occhino and Jordan Walke: JS Apps at Facebook</a>. This is the talk, where Facebook introduced ReactJS to the public.</p> <p>For three years, I’ve employed the conventional MVVM approach alongside SwiftUI, but consistently encountered struggles with the framework. I regrettably overlooked Apple’s beneficial property wrappers, attempting instead to create solutions from scratch. This misguided effort led to increased complications, a surplus of code, and heightened maintenance demands. It was during this period that I realized the imperative for a more effective strategy.</p> <h2 id="understanding-the-mv-pattern">Understanding the MV Pattern</h2> <p>The main idea behind the MV pattern is to allow views directly talk to the model. In MV pattern, <strong>views are the view model</strong>. This eliminates the need for creating unnecessary view models for each view, which simply contributes to the size of the project but does not provide any additional benefits. Keep in mind that every single line of code you write also needs to be maintained. This means that your code is not an asset but a liability.</p> <blockquote> <p>MV pattern does not advocate putting all the business logic inside a view. That particular pattern is known as <a href="https://www.patterns.dev/posts/presentational-container-pattern/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Container Pattern</a>. I have also talked about it on my blog. You can read about it <a href="https://azamsharp.com/2023/01/24/introduction-to-container-pattern.html" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">here</a>.</p> </blockquote> <p>MV pattern can take different forms depending on the type of app you are writing. This article is mainly focused on a client/server apps, where a SwiftUI app serves as a client.</p> <blockquote> <p>Although there is no official name for this pattern, I have seen most people call it MV Pattern since it does not include an extra layer of view models. This pattern has originated from Apple’s documentation and code samples.</p> </blockquote> <p>In WWDC 2020 talk titled <a href="https://developer.apple.com/videos/play/wwdc2020/10040/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Data Essentials in SwiftUI</a> Apple presented the following diagram.</p> <p><img src="https://azamsharp.com/images/single-source.png" alt="ObservableObject as the data dependency surface" loading="lazy"></p> <p>The central concept revolves around granting views access to a unified layer or interface, which functions as the definitive source of information and grants entry to all components within the application. On occasions, this unified layer might correspond to the network layer. This approach is advisable in situations where your views autonomously consume the data, and making alterations to the data doesn’t necessitate synchronization with other segments of your application. A straightforward example could involve a third-party service that furnishes a list of up-to-date news articles. In this case, your view can directly interact with the network layer to showcase the news articles. This concept is illustrated below:</p> <pre><code>struct NewsListScreen: View {
-
-		@Environment(\.httpClient) private var httpClient
-		@State private var articles: [Article] = []
-
-		private var sortedArticles: [Article] {
-				articles.sorted { lhs, rhs in
-						// sorting logic
-				}
-		}
-
-		private func loadArticles() async {
-				let resource = Resource(Constants.Urls.articles)
-				do {
-						try articles = httpClient.load(resource)
-				} catch {
-						// handle error
-				}
-
-		}
-
-		var body: some View {
-				List(sortedArticles) { article in
-						ArticleView(article)
-				}.task {
-						await loadArticles()
-				}
-
-		}
-}
-</code></pre> <p>The <code>NewsListScreen</code> serves as a container view. This means it is responsible for making network calls and fetching the data. Once the data is fetched, it can be passed down to the presentation view. At present the only reusable view we have in the above code is <code>ArticleView</code>. Depending on your app and requirements, you can also extract out List into a separate <code>ArticleListView</code> component.</p> <p>Another thing to notice in the above code is the use of <code>sortedArticles</code> private property. As I mentioned earlier that in MV Pattern, views are the view models. This is no need to create a view model associated with <code>NewsListScreen</code>. If your view is getting large then use the principles of <a href="https://youtu.be/rgckaWoSlwc?si=5ZaRLmFtRgf40Vbp" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">view decomposition to break it into smaller pieces</a>. Keep in mind that views in SwiftUI are value types. Value types are cheap to create. This gives you the flexibility to break your views into multiple reusable pieces.</p> <blockquote> <p>If you are wondering how would you test the sortedArticles property then keep reading. Testing will be covered in the later section of this article.</p> </blockquote> <p>The above technique is ideal when the state is private to the view and is not shared with the rest of the application. You can still alter/modify the state by passing the state to child views using <code>@Binding</code> and <code>@Bindable</code> property wrappers and macros, but once you are passing the state into multiple levels of view hierarchy it becomes repetitive and time consuming.</p> <p>When working on larger apps, you need the ability to share state with other views of the application without having to pass down through the view hierarchy. Apple has demonstrated this approach in few sample projects, which includes <a href="https://developer.apple.com/documentation/swiftui/fruta_building_a_feature-rich_app_with_swiftui" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Fruta</a> and <a href="https://developer.apple.com/documentation/swiftui/food_truck_building_a_swiftui_multiplatform_app" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">FoodTruck</a>. These sample applications demonstrated how to use this pattern against a hard-coded data source. But in WWDC video title <strong>“<a href="https://developer.apple.com/videos/play/wwdc2022/110360/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Use Xcode for server-side development</a>“</strong> Apple showed how to update the existing FoodTruck app and consume the data from an API response.</p> <p>The screenshot below shows <code>FoodTruckModel</code> using the <code>DonutsServerClient</code> to retrieve list of donuts. <code>DonutsServerClient</code> is responsible for making an actual request to the server and downloading the donuts. Once the donuts are downloaded they are assigned to the serverDonuts property maintained by the FoodTruckModel.</p> <p><img src="https://azamsharp.com/images/xcode-server.png" alt="Use Xcode for server-side development" loading="lazy"></p> <p><a href="https://developer.apple.com/videos/play/wwdc2022/110360/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Use Xcode for server-side development</a></p> <p>Here is the updated diagram to support the networking layer.</p> <p><img src="https://azamsharp.com/images/aggregate-model-updated.001.jpeg" alt="Aggregate Root" loading="lazy"></p> <blockquote> <p>I know what you are thinking. Are we going to take advice based on Apple’s code samples blindly? No! Never take any advice blindly. Always invest time and research and weigh the advantages and disadvantages of each approach. I have evaluated many different techniques and patterns and found this to be the best and simplest option when building client/server apps using SwiftUI. <strong>Do your research!</strong>.</p> </blockquote> <p>Based on Apple’s recommendation in their WWDC videos and code samples and my own personal experience, I have been implementing a single aggregate model, which holds the entire state of the application. For small and medium sized apps, a single aggregate model might be enough. For complicated apps, you can have multiple aggregate models which will group related entities together. Multiple aggregate models are discussed later in this article.</p> <blockquote> <p>Once again keep in mind that this article is about client/server apps. If you are using Core Data or anything else then you will have to do your research. For purely Core Data apps, I have been experimenting with Active Record Pattern. You can read about it <a href="https://azamsharp.com/2023/01/30/active-record-pattern-swiftui-core-data.html" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">here</a>.</p> </blockquote> <p>Following the pattern discussed in <a href="https://developer.apple.com/videos/play/wwdc2022/110360/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Use Xcode for server-side development</a> talk, here is the StoreModel I have implemented for my application.</p> <pre><code>class StoreModel: ObservableObject {
-
-		private var storeHTTPClient: StoreHTTPClient
-
-		init(storeHTTPClient: StoreHTTPClient) {
-				self.storeHTTPClient = storeHTTPClient
-		}
-
-		@Published var products: [Product] = []
-		@Published var categories: [Category] = []
-
-		func addProduct(_ product: Product) async throws {
-				 try await storeHTTPClient.addProduct(product)
-		}
-
-		func populateProducts() async throws {
-				self.products = try await storeHTTPClient.loadProducts()
-		}
-}
-</code></pre> <p><code>StoreModel</code> is an aggregate model that centralizes all the data for the application. Views communicate directly with the StoreModel to perform queries and persistence operations. StoreModel also utilizes <code>StoreHTTPClient</code>, which is used to perform network operations. StoreHTTPClient is a stateless network layer. This means it can be used in other parts of the application that are not SwiftUI, meaning UIKit or even on a different platform (macOS).</p> <blockquote> <p>In Domain-Driven Design (DDD), an aggregate is a cluster of related objects that are treated as a single unit of work for the purpose of data consistency and transactional boundaries. An aggregate model, then, is a representation of an aggregate in code, typically as a class or group of classes.</p> </blockquote> <p>StoreModel can be used in a variety of different ways. You can use StoreModel as a @StateObject if you only want the data available to a particular view and if you want to tie the object with the lifetime of the view. But quite often I find myself adding StoreModel to @EnvironmentObject so that it can be available in the injected view and all of its sub views.</p> <pre><code>@main
-struct StoreAppApp: App {
-		var body: some Scene {
-				WindowGroup {
-						ContentView()
-								.environmentObject(StoreModel(client: StoreHTTPClient()))
-
-				}
-		}
-}
-</code></pre> <p>After the StoreModel is injected through the @EnvironmentObject, you can access the <code>StoreModel</code> as shown in the implementation below.</p> <pre><code>struct ContentView: View {
-
-		@EnvironmentObject private var model: StoreModel
-
-		var body: some View {
-				ProductListView(products: model.products)
-						.task {
-								do {
-										try await model.populateProducts()
-								} catch {
-										print(error.localizedDescription)
-								}
-						}
-		}
-}
-</code></pre> <blockquote> <p>You might be tempted to use <code>@EnvironmentObject</code> inside all the views. Although, it will work as expected but for larger applications you need to make presentation views free of any dependencies. Presentation views are usually child views that are created for the purpose of reusability. It you try to access <code>@EnvironmentObject</code> inside the child views then it effects their reusability status and they become less useful. The main reason is that now they are dependent on the <code>@EnvironmentObject</code> to provide data to them. Instead we should follow the top-down approach, where the data is passed from the parent view to the child view. This is also known as the <a href="https://www.patterns.dev/posts/presentational-container-pattern/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Container/Presentation pattern</a>.</p> </blockquote> <p>Apart from fetching and persistence, StoreModel can also provide sorting, filtering, searching and other operations directly to the view.</p> <blockquote> <p>If I was using the traditional MVVM pattern then I would create several view models to accommodate each screen. This can include <code>ProductListViewModel</code>, <code>ProductViewModel</code>, <code>AddProductViewModel</code>, <code>ProductDetailViewModel</code> and many more. Most of the time, these view models end up with one or two functions and maintaining a single source of truth can become very hard. In MV pattern, the view itself is the view model so we don’t need to create unnecessary view models for most of the time. The view, which is also a view model is simply going to ask model (Aggregate Model) for the data.</p> </blockquote> <p><strong>The source of truth in a client/server application is the server.</strong>. This means you should not be adding view models conforming to ObservableObject (new source of truth) protocol just because you added a new view. The source of truth for that view has not changed, it is still the server.</p> <p>A single StoreModel is ideal for small or even medium sized apps. But for larger apps it will be a good idea to introduce multiple aggregate models based on the bounded context of the application. In the next section, we will cover multiple aggregate models and how they benefit when working in large teams.</p> <p>The MV pattern and MVVM pattern may appear similar at first glance, but they exhibit significant differences. In a client/server app using MVVM, a separate view model is created for each screen. For instance, in a movies management app, you might end up with multiple view models like MovieListViewModel, AddMovieViewModel, MovieDetailViewModel, and possibly MovieViewModel.</p> <p>However, MV takes a different approach altogether, omitting the creation of view models. Instead, it directly binds the DTO objects (models from the server) to the view. In some cases, the view can directly utilize the network layer to fetch the DTO objects, while in others, a single Data Store or Aggregate Model (ObservableObject) aids in accessing the movies. Any required UI validation or data transformation is implemented within the view itself.</p> <p>To ensure reusability of child views, the container and presenter pattern come into play. One view is responsible for requesting and obtaining the data, while another view, known as the presenter, takes charge of displaying the data. This separation of responsibilities ensures a more modular and maintainable design.</p> <p>With MV, the overall structure differs from MVVM, allowing for a more direct handling of data and views without the need for multiple view models. By leveraging the container and presenter pattern, your app can achieve better organization and reusability of views.</p> <h2 id="multiple-aggregate-models">Multiple Aggregate Models</h2> <p>As you learned in the previous section, the purpose of an aggregate model is to expose data to your view. As Luca explained in <a href="https://developer.apple.com/videos/play/wwdc2020/10040/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Data Essentials in SwiftUI WWDC 2020 (11:30)</a> “The aggregate model is an <code>ObservableObject</code>, which acts as your data dependency surface. This allows us to model the data using value type and manage its life cycle and side effects with a reference type.”</p> <p>As your business grows, a single aggregate model might not be enough to maintain the life cycle and side effects of an entire application. This is where we will introduce multiple aggregate models. These aggregate models are based on the bounded context of the application. Bounded context refers to a specific area of the system that has clear boundaries and is designed to serve a particular business purpose.</p> <p>In an e-commerce application, we can have several bounded contexts including checkout process, inventory management system, catalog, fulfillment, shipment, ordering, marketing and customer management modules.</p> <p>Defining bounded context is important in software development and it helps to break down the application into small manageable pieces. This also allows teams to work on different parts of the system without interfering with each other.</p> <p>Developers are usually not good in finding bounded context for software applications. The main reason is that their technical knowledge does not directly map to domain knowledge. Domain knowledge requires different set of skills and a domain expert is a better suited for this kind of role. A domain expert is a person, who may not be tech savvy but understands how the business or a particular domain works. In large projects, you may have multiple domain experts, each handling a different business domain. This is why it is extremely important for developers to communicate with domain experts and understand the domain before starting any development.</p> <p>Once, you have identified different bounded contexts associated with your application you can represent them in the form of aggregate models. This is shown in the diagram below.</p> <p><img src="https://azamsharp.com/images/aggregate-model-updated.002.jpeg" alt="Multiple Aggregate Root" loading="lazy"></p> <p>The network layer can also be divided into multiple HTTP clients or you can use a single generic network layer for your entire application. This is shown in the following diagram.</p> <p><img src="https://azamsharp.com/images/aggregate-model-updated.003.jpeg" alt="Multiple Aggregate Root" loading="lazy"></p> <p>The Catalog aggregate model will be responsible for providing views with all the entities associated with Catalog. This can include but not limited to:</p> <ul> <li>Product</li> <li>Category</li> <li>Brand</li> <li>Review</li> </ul> <p>The Ordering aggregate model will be responsible for providing views with all the ordering related entities. This can include but not limited to:</p> <ul> <li>Order</li> <li>OrderLineItem</li> <li>OrderStatus</li> <li>ShippingMethod</li> <li>Discount</li> </ul> <p>The <code>Catalog</code> and <code>Ordering</code> aggregate models will be reference types conforming to <code>ObservableObject</code> protocol. And all the entities they provide will be value types.</p> <p>The outline of <code>Catalog</code> aggregate model and <code>Product</code> entity is shown below:</p> <pre><code>
-struct Product: Codable {
-		let productId: Int
-		let name: String
-		let category: Category
-		let price: Double
-		let description: String
-		let reviews: [Review]?
-}
-
-@MainActor
-class Catalog: ObservableObject {
-
-		// designated or generic HTTP client
-		let storeHTTPClient: StoreHTTPClient
-
-		@Published var products: [Product]
-		@Published var categories: [Category]
-
-		init(storeHTTPClient: StoreHTTPClient) {
-				self.storeHTTPClient = storeHTTPClient
-		}
-
-		func loadProducts() {
-				 products = storeHTTPClient.loadProducts
-		}
-
-		func getProductById(_ productId: Int) -&gt; Product? {
-				// fetch product by id
-		}
-
-		func getProductsByCategory(_ categoryId: Int) -&gt; [Product] {
-			 // get products by category
-		}
-
-		func getCategories() -&gt; [Category] {
-				categories = storeHTTPClient.loadCategories()
-		}
-}
-</code></pre> <p>Catalog and Ordering aggregate models are injected into the application as an environment object. You can inject them directly in your application root view or the root view of each section of the application. The later is shown below:</p> <pre><code>@main
-struct StoreApp: App {
-
-		var body: some Scene {
-				WindowGroup {
-						ContentView()
-								.environmentObject(Catalog(client: CatalogHTTPClient()))
-								.environmentObject(Ordering(client: OrderingHTTPClient()))
-
-				}
-		}
-}
-</code></pre> <p>Now, inside a view you can use Catalog or Ordering models by accessing it through <code>@EnvironmentObject</code>. The implementation is shown below:</p> <pre><code>struct CatalogListScreen: View {
-
-		@EnvironmentObject private var catalog: Catalog
-
-		var body: some View {
-				List(catalog.products) { product in
-						Text(product.name)
-				}.task {
-						do {
-								try await catalog.loadProducts()
-						} catch {
-								print(error.localizedDescription)
-						}
-				}
-		}
-}
-</code></pre> <p>If your view needs to access ordering information then it can utilize the Ordering aggregate model too.</p> <pre><code>struct AdminDashboardScreen: View {
-
-		@EnvironmentObject private var catalog: Catalog
-		@EnvironmentObject private var ordering: Ordering
-
-		var body: some View {
-				VStack {
-						List(catalog.products) { product in
-								Text(product.name)
-						}
-						List(ordering.allOrders) { order in
-								Text(order.status)
-						}
-				}.task {
-						do {
-								try await catalog.loadProducts()
-								try await ordering.loadOrders()
-						} catch {
-								print(error.localizedDescription)
-						}
-				}
-		}
-}
-</code></pre> <p>There are scenarios when your aggregate model will need to access information from another aggregate model. In those cases, your aggregate model will simply use the network service to fetch the information that is needs.</p> <blockquote> <p>It is important that your caching layer is called from within the network layer and not from aggregate models. This will allow aggregate models to take advantage of caching through the network layer, instead of implementing it on their own. By accessing caching layer from inside the network layer, all your aggregate models can benefit from faster response through the use of cached resources.</p> </blockquote> <blockquote> <p>As mentioned earlier for small or even medium sized apps, you may only need a single aggregate model. For larger apps you can introduce new aggregate models. Make sure to consult with a domain expert before creating application boundaries.</p> </blockquote> <p>The concept of domain boundaries can also be applied to user interfaces. This allows us to reuse user interface elements in other applications.</p> <p><img src="https://azamsharp.com/images/user-interface.png" alt="Factor out common pieces" loading="lazy"></p> <ul> <li>Permission has been granted from the original author of the image to use it in this article.</li> </ul> <blockquote> <p>You can factor out common interface elements using Swift Package Manager and import those packages into other applications.</p> </blockquote> <p>Let’s go ahead and zoom out and see how our architecture looks like with all the pieces in place.</p> <p><img src="https://azamsharp.com/images/architecture-model-updated.jpeg" alt="Architecture" loading="lazy"></p> <ul> <li>This image has been updated and the permission has been granted from the original author of the image to use it in this article.</li> </ul> <p>As discussed earlier, each bounded context is represented by its own module. These modules can be represented by a folder or a package dependency.</p> <p><strong>CatalogUI:</strong> Represents user interface associated with catalog. This can include all the catalog specific stuff like AddCatalogScreen, UpdateCatalogScreen etc.</p> <p><strong>Catalog:</strong> Represents the models associated with catalog. This will contain the aggregate model and all the entities exposed by the aggregate model.</p> <p><strong>MyStoreKit</strong>: Represents the HTTP client for performing network calls.</p> <p><strong>Foundation Core</strong>: Represents resources used by all modules. This can include helper classes/structs, reusable views, images, icons and even preview content used for testing.</p> <blockquote> <p>Each module like Shipping, Inventory, Ordering etc can be represented by a folder structure or a package dependency. This really depends on your needs and if you wish to reuse your modules in other projects.</p> </blockquote> <p>Using this architecture, future business requirements and data access services can be added without interfering with existing ones. This also allows more collaborative environment as different teams can work on different modules without interfering with each other.</p> <h2 id="view-specific-logic">View Specific Logic</h2> <p>In this last section, I talked about how aggregate models can serve as a single source of truth and provide required data to the views. But what about view specific logic? Where should that logic be placed and what options do we have to perform testing on that logic.</p> <p>In the code below, we want to filter the products based on the minimum and maximum price. The implementation is shown below:</p> <pre><code>struct ContentView: View {
-
-		let httpClient: HTTPClientProtocol
-		@State private var products: [Product] = []
-		@State private var min: Double?
-		@State private var max: Double?
-		@State private var filteredProducts: [Product] = []
-
-		private func filterProducts() {
-
-				guard let min = min,
-							let max = max else { return }
-
-				filteredProducts = products.filter {
-						$0.price &gt;= min &amp;&amp; $0.price &lt;= max
-				}
-		}
-
-		private var isFormValid: Bool {
-
-				guard let min = min,
-							let max = max else { return false }
-
-				return min &lt; max
-		}
-
-		var body: some View {
-				VStack {
-						HStack {
-								TextField("Min", value: $min, format: .number)
-										.textFieldStyle(.roundedBorder)
-								TextField("Max", value: $max, format: .number)
-										.textFieldStyle(.roundedBorder)
-						}
-						Text("Max must be larger than min.")
-								.frame(maxWidth: .infinity, alignment: .leading)
-								.font(.caption)
-								.padding([.bottom], 20)
-
-						Button("Apply") {
-								filterProducts()
-						}
-
-						.disabled(!isFormValid)
-
-						List(filteredProducts.isEmpty ? products: filteredProducts) { product in
-								HStack {
-										Text(product.title)
-										Spacer()
-										Text(product.price, format: .currency(code: "USD"))
-								}
-						}
-						.task {
-								do {
-										products = try await httpClient.loadProducts()
-								} catch {
-										print(error)
-								}
-				}
-				}.padding()
-		}
-}
-
-struct ContentView_Previews: PreviewProvider {
-		static var previews: some View {
-				ContentView(httpClient: HTTPClientStub())
-		}
-}
-</code></pre> <blockquote> <p>If filterProducts or similar functions will be involved in any model logic then you can also put it inside the aggregate root model, instead of the view.</p> </blockquote> <p>Please note that instead of invoking the real service, we are using a stubbed version of the HTTPClient that returns pre-configured response. Another good option would be to create separate JSON files for each response and read data from those files, when using Xcode previews. I covered that in one of my YouTube video, <a href="https://youtu.be/EycwLxTU-EA" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Building SwiftUI Xcode Previews Using JSON File</a>.</p> <blockquote> <p>Keep in mind that in the above scenario, if no results are found during filtering then the original products array is returned.</p> </blockquote> <p>We have two pieces of code in the view that constitute as logic, <code>isFormValid</code> and <code>filterProducts</code>. If we want to test that code we have number of ways.</p> <p>Use Xcode previews! I know this does not sound fancy but I encourage you to use Xcode previews to test your view based logic. Xcode previews is extremely fast (depending on the machine you are using) and it gives you the same feeling as Red/Green/Refactor cycle. For this particular scenario, Xcode previews will be my first choice.</p> <blockquote> <p>Xcode previews is not the answer to everything. If you are dealing with complicated view logic then it will be a good idea to move out all the logic into a separate struct and then write unit tests for that piece of code. Remember, one of the important aspects of why we test is to <a href="https://azamsharp.com/2023/02/15/testing-is-about-confidence.html" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">gain confidence about our code</a>.</p> </blockquote> <p>Another option is to extract the logic from the view and then write unit tests against it. This is shown in the implementation below:</p> <pre><code>struct ProductFilterForm {
-
-		var min: Double?
-		var max: Double?
-
-		func filterProducts(_ products: [Product]) -&gt; [Product] {
-
-				guard let min = min,
-							let max = max else { return [] }
-
-				return products.filter {
-						$0.price &gt;= min &amp;&amp; $0.price &lt;= max
-				}
-		}
-}
-</code></pre> <p><code>ProductFilterForm</code> can now be unit tested in isolation. The unit test is shown below:</p> <pre><code>
-func test_user_can_filter_products_by_price() throws {
-
-				self.continueAfterFailure = false
-
-				let products = [
-						Product(id: 1, title: "Product 1", price: 10),
-						Product(id: 2, title: "Product 2", price: 100),
-						Product(id: 3, title: "Product 3", price: 200),
-						Product(id: 4, title: "Product 4", price: 500)
-				]
-
-				let expectedFilteredProducts = [
-						Product(id: 2, title: "Product 2", price: 100),
-						Product(id: 3, title: "Product 3", price: 200),
-						Product(id: 4, title: "Product 4", price: 500)
-				]
-
-				let productFilterForm = ProductFilterForm(min: 100, max: 500)
-				let filteredProducts = productFilterForm.filterProducts(products)
-
-				for expectedProduct in expectedFilteredProducts {
-
-						let product = filteredProducts.first { $0.id == expectedProduct.id }
-
-						XCTAssertNotNil(product)
-						XCTAssertEqual(product!.title, expectedProduct.title)
-						XCTAssertEqual(product!.price, expectedProduct.price)
-				}
-
-		}
-
-</code></pre> <blockquote> <p>Unit testing view’s logic in isolation as shown above can be beneficial for complicated user interfaces. Keep in mind that just because your unit test passes, does not mean that your user interface is working as expected.</p> </blockquote> <p>And the final kind of test you can write is an end-to-end test. E2E tests are great because they test the app from user’s point of view and they are best against regression. The downside is that E2E tests are slower then running unit tests. The main reason they are slower is because they are testing the complete application instead of small units. Most of the issues in software exists because the application was tested at unit level and not at system level. I encourage you to spend some time writing meaningful E2E tests.</p> <p>Here is an implementation of an E2E test for the above scenario.</p> <pre><code>  func test_user_can_filter_products_based_on_price() {
-
-				let app = XCUIApplication()
-				app.launchEnvironment = ["ENV": "TEST"]
-				app.launch()
-
-				app.textFields["minTextField"].tap()
-				app.textFields["minTextField"].typeText("100")
-
-				app.textFields["maxTextField"].tap()
-				app.textFields["maxTextField"].typeText("500")
-
-				app.buttons["applyButton"].tap()
-
-				// assert that the count is correct
-				XCTAssertEqual(3, app.collectionViews["productList"].cells.count)
-				// assert that the items are correct
-				XCTAssertEqual("Product 2", app.collectionViews["productList"].staticTexts["Product 2"].label)
-				XCTAssertEqual("Product 3", app.collectionViews["productList"].staticTexts["Product 3"].label)
-				XCTAssertEqual("Product 4", app.collectionViews["productList"].staticTexts["Product 4"].label)
-		}
-</code></pre> <p>In the end you will have to decide where in <a href="https://martinfowler.com/articles/practical-test-pyramid.html" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">testing pyramid</a> you want to invest your time to get the best return on your investment.</p> <blockquote> <p>If you want to learn more about testing then you can check out my course <a href="https://www.udemy.com/course/test-driven-development-in-ios-using-swift/?referralCode=07649C41E6E184CE86B3" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Test Driven Development in iOS Using Swift</a>.</p> </blockquote> <h2 id="screens-vs-views">Screens vs Views</h2> <p>When I was working with Flutter, I observed a common pattern for organizing the widgets. Flutter developers were separating the widgets based on whether the widgets represents an entire screen of just a reusable control. Since React, Flutter and SwiftUI are extremely similar in nature we can apply the same principles when building SwiftUI applications.</p> <p>For example when displaying details of a movie, instead of calling that view MovieDetailView, you can call it MovieDetailScreen. This will make it clear that the detail view is an actual screen and not some reusable child view. Here are few more examples.</p> <p><strong>Screens</strong></p> <ul> <li>MovieDetailScreen</li> <li>HomeScreen</li> <li>LoginScreen</li> <li>RegisterScreen</li> <li>SettingsScreen</li> </ul> <p><strong>Views</strong></p> <ul> <li>RatingsView</li> <li>MessageView</li> <li>ReminderListView</li> <li>ReminderCellView</li> </ul> <p>I find that it is always a good idea to keep a close eye on our friendly neighbors React and Flutter. You never know what ideas you will bring from other declarative frameworks into SwiftUI.</p> <h2 id="validation">Validation</h2> <p>There is a famous saying in software development, garbage in, garbage out. This means if you allow users to enter incorrect information (garbage) through the user interface then that garbage will eventually end up in your database. And usually when this happens, it becomes extremely difficult and time consuming to clean the database.</p> <p>You must take necessary steps to prevent users from submitting incorrect information in the first place.</p> <p>Consider a simple <code>LoginScreen</code> view with username and password TextFields. If we want to enable the login Button only when the view is validated correctly, we can use the implementation below:</p> <pre><code>struct LoginScreen: View {
-
-		@State private var username: String = ""
-		@State private var password: String = ""
-
-		private var isFormValid: Bool {
-				!username.isEmptyOrWhiteSpace &amp;&amp; !password.isEmptyOrWhiteSpace
-		}
-
-		var body: some View {
-				Form {
-						TextField("Username", text: $username)
-						TextField("Password", text: $password)
-						Button("Login") {
-
-						}.disabled(!isFormValid)
-				}
-		}
-}
-</code></pre> <p>For such trivial logic, you can use Xcode Previews to quickly perform manual testing and validate the outcome.</p> <p>If you are working on a more complicated form, then it is advised to extract it into its own struct. This concept is shown in the implementation below.</p> <pre><code>struct LoginFormConfig {
-
-		var username: String = ""
-		var password: String = ""
-
-		var isFormValid: Bool {
-				!username.isEmptyOrWhiteSpace &amp;&amp; !password.isEmptyOrWhiteSpace
-		}
-}
-
-struct LoginScreen: View {
-
-		@State private var loginFormConfig: LoginFormConfig = LoginFormConfig()
-
-		var body: some View {
-				Form {
-						TextField("Username", text: $loginFormConfig.username)
-						TextField("Password", text: $loginFormConfig.password)
-						Button("Login") {
-
-						}.disabled(!loginFormConfig.isFormValid)
-				}
-		}
-}
-</code></pre> <p><code>LoginFormConfig</code> encapsulates the form validation. This also allows us to write unit tests against the LoginFormConfig. Few unit tests are shown below:</p> <pre><code>final class LearnTests: XCTestCase {
-
-		func test_login_form_validates_successfully() {
-
-				let expectedOutputs: [[String: Any]] = [
-						["username": "johndoe", "password": "password", "isFormValid": true],
-						["username": "", "password": "password", "isFormValid": false],
-						["username": "johndoe", "password": " ", "isFormValid": false],
-						["username": "", "password": " ", "isFormValid": false],
-						["username": "   ", "password": "password", "isFormValid": false],
-						["username": " johndoe", "password": " password", "isFormValid": true]
-				]
-
-				for expectedOutput in expectedOutputs {
-						let username = expectedOutput["username"] as! String
-						let password = expectedOutput["password"] as! String
-						let isFormValid = expectedOutput["isFormValid"] as! Bool
-
-						let loginFormConfig = LoginFormConfig(username: username, password: password)
-						XCTAssertEqual(loginFormConfig.isFormValid, isFormValid)
-				}
-		}
-}
-</code></pre> <p>In the end extracting the form validation into a separate struct and writing unit tests for it depends on your level of confidence. Simple forms can be tested easily through Xcode Previews and do not require additional structure or even unit tests.</p> <blockquote> <p>Validation helper functions like isEmptyOrWhiteSpace, isNumeric, isEmail, isLessThan can be moved into a separate Swift package. This will promote reusability and other projects can also benefit from using it.</p> </blockquote> <p>I covered few different ways of handling and displaying validation errors in one of my previous articles that you can read <a href="https://azamsharp.com/2022/08/09/intro-to-mv-state-pattern.html" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">here</a>.</p> <h2 id="grouping-view-events">Grouping View Events</h2> <p>One way to create reusable views in SwiftUI is to delegate the events to the parent view. This allows views to be used in different scenarios and without tying them to a particular logic. One way to accomplish this is to use closures.</p> <p>Consider a <code>ReminderCellView</code>, which allows the user to perform check/uncheck and delete operations. The implementation is shown below:</p> <pre><code>struct ReminderCellView: View {
-
-		let index: Int
-		let onChecked: (Int) -&gt; Void
-		let onDelete: (Int) -&gt; Void
-
-		var body: some View {
-				HStack {
-						Image(systemName: "square")
-								.onTapGesture {
-										onChecked(index)
-								}
-						Text("ReminderCellView \(index)")
-						Spacer()
-						Image(systemName: "trash")
-								.onTapGesture {
-										onDelete(index)
-								}
-				}
-		}
-}
-</code></pre> <p><code>ReminderCellView</code> exposes <code>onChecked</code> and <code>onDelete</code> closures. The caller can use these closures to perform a particular task. The calling side is shown below:</p> <pre><code>struct ContentView: View {
-
-		var body: some View {
-				List(1...20, id: \.self) { index in
-						ReminderCellView(index: index, onChecked: { index in
-								// do something
-						}, onDelete: { index in
-								// do something
-						})
-				}
-		}
-}
-</code></pre> <p>As the complexity of <code>ReminderCellView</code> increases and it exposes more events then the calling side will become more complicated.</p> <p>We can fix this issue by grouping all the events into a simple enum. This is shown below:</p> <pre><code>enum ReminderCellEvents {
-		case onChecked(Int)
-		case onDelete(Int)
-}
-</code></pre> <p>The <code>ReminderCellView</code> can be updated to use <code>ReminderCellEvents</code>. This is shown below:</p> <pre><code>struct ReminderCellView: View {
-
-		let index: Int
-		let onEvent: (ReminderCellEvents) -&gt; Void
-
-		var body: some View {
-				HStack {
-						Image(systemName: "square")
-								.onTapGesture {
-										onEvent(.onChecked(index))
-								}
-						Text("ReminderCellView \(index)")
-						Spacer()
-						Image(systemName: "trash")
-								.onTapGesture {
-										onEvent(.onDelete(index))
-								}
-				}
-		}
-}
-</code></pre> <p>Now, instead of dealing with multiple closures we are only handling a single enum based event structure. The calling site also looks much cleaner.</p> <pre><code>struct ContentView: View {
-
-		var body: some View {
-				List(1...20, id: \.self) { index in
-						ReminderCellView(index: index) { event in
-								switch event {
-										case .onChecked(let index):
-												print(index)
-										case .onDelete(let index):
-												print(index)
-								}
-						}
-				}
-		}
-}
-</code></pre> <p>In the end you will have to decide when you want to group events into an enum and when you want to use them individually (multiple closures). I tend to prefer using enum events if I have more than two closures exposed by the view.</p>  <p>SwiftUI introduced NavigationStack in iOS 16, which allowed developers to configure global routes for their application. This is similar to React Router, where routes can be configured in a single place. When I originally wrote this section, I used <code>@EnvironmentObject</code> to store the routes. Even though it worked as expected but it did not felt natural. The main purpose of <code>@EnvironmentObject</code> is to store state that will be shared with different views in the application. <code>@EnvironmentObject</code> can be really beneficial when you have to access state in a deeply nested view, without having to pass through all the parent views.</p> <p>In terms of navigation, we are not sharing state with other views that will be displayed on the screen, we are sharing app environment configurations. For this scenario <code>@Environment</code> is a much better choice. <code>@Environment</code> values can be used to store configuration settings, services, application routers and more. You have already seen <code>@Environment</code> in action earlier when we stored <code>httpClient</code> as a custom environment value.</p> <p>We will start by creating an enum to represent routes for our application.</p> <pre><code>enum Route: Hashable {
-		case home
-		case login
-		case detail(Product)
-}
-</code></pre> <blockquote> <p>For larger apps you can create nested enums to divide the routes based on different sections of the application.</p> </blockquote> <p>In my previous implementation, I was storing the closure associated with navigation directly in the <code>Environment</code> values. Some users suggested that this is not a good practice and it will cause unnecessary rendering of the views. I have personally not experienced any issues with the implementation but decided to update it to support structs as <code>Environment</code> value instead of closure.</p> <p><code>NavigationAction</code> struct will be responsible for storing the action associated with navigation. We will also utilize the SwiftUI built-in <code>callAsFunction</code>, which is invoked automatically when you create an instance of <code>NavigationAction</code>. The primary purpose of <code>NavigationAction</code> is to wrap the closure into an action. This allows us to store a value type struct in the <code>Environment</code> value as oppose to a closure. The implementation of <code>NavigationAction</code> is shown below:</p> <pre><code>struct NavigateAction {
-		typealias Action = (NavigationType) -&gt; ()
-		let action: Action
-		func callAsFunction(_ navigationType: NavigationType) {
-				action(navigationType)
-		}
-}
-</code></pre> <p>Next, we will implement custom Environment key and Environment values.</p> <pre><code>
-enum NavigationType: Hashable {
-		case push(Route)
-		case unwind(Route)
-}
-
-struct NavigateEnvironmentKey: EnvironmentKey {
-		static var defaultValue: NavigateAction = NavigateAction(action: { _ in })
-}
-
-extension EnvironmentValues {
-		var navigate: (NavigateAction) {
-				get { self[NavigateEnvironmentKey.self] }
-				set { self[NavigateEnvironmentKey.self] = newValue }
-		}
-}
-</code></pre> <p>The important thing to notice here is the declaration and usage of <code>NavigationType</code>. The <code>NavigationType</code> enum represents the two types of navigation that can be performed. This includes the default push navigation and also unwind navigation. Unwind navigation will allow users to go from View G to View C or root.</p> <blockquote> <p>If your application does not support unwind navigation then you can exclude <code>NavigationType</code> completely and directly use <code>Route</code> instead.</p> </blockquote> <p>We will also implement a <code>onNavigate</code> function on the view. This will allow us to easily inject the required environment values.</p> <pre><code>extension View {
-		func onNavigate(_ action: @escaping NavigateAction.Action) -&gt; some View {
-				self.environment(\.navigate, NavigateAction(action: action))
-		}
-}
-</code></pre> <p>Next, we need to setup the routes and inject Environment values at the root of our application. Usually this is performed in the App file of your application. The implementation is shown below:</p> <pre><code>@main
-struct LearnApp: App {
-
-		@State private var routes: [Route] = []
-
-		var body: some Scene {
-				WindowGroup {
-						NavigationStack(path: $routes) {
-								ContentView()
-										.navigationDestination(for: Route.self) { route in
-												switch route {
-														case .home:
-																Text("HomeView")
-														case .login:
-																Text("LoginView")
-														case .detail(let product):
-																Text("ProductView \(product.name)")
-												}
-										}
-						}.onNavigate { navType in
-								switch navType {
-										case .push(let route):
-												routes.append(route)
-										case .unwind(let route):
-
-												if route == .home {
-														routes = []
-												} else {
-														guard let index = routes.firstIndex(where: { $0 == route })  else { return }
-														routes = Array(routes.prefix(upTo: index + 1))
-												}
-								}
-						}
-				}
-		}
-}
-</code></pre> <p>The <code>NavigationStack</code> tracks the routes using the $routes binding. Whenever a new route is added or removed, <code>.navigationDestination</code> is validated. The <code>.navigationDestination</code> modifier is responsible for returning the destination view based on the type of the route. In a similar fashion, environment values are injected to the <code>NavigationStack</code> using the <code>onNavigate</code> function.</p> <p>Finally, views can perform programmatic navigation using the new <code>@Environment</code> key called <code>navigate</code>. This is shown in the following implementation:</p> <pre><code>struct ReviewList: View {
-
-		@Environment(\.navigate) private var navigate
-
-		var body: some View {
-				VStack {
-						Text("Reviews")
-						Button("Go to Product") {
-								 navigate(.push(.detail(Product(name: "Chair"))))
-						}
-						Button("Go back to Home View") {
-								navigate(.unwind(.home))
-						}
-				}
-		}
-}
-</code></pre> <p>While researching for this section, I tried out various ways to perform routing. One of the solutions included the following easy to use syntax:</p> <pre><code>navigate(.detail(Product(name: "Chair")))
-</code></pre> <p>The problem I ran into was the above implementation did not supported unwinding routes. One way to handle unwinding would be to simply check the routes array and then if the route already exists then drop all the indexes after that route. Although this can be implemented but it makes code unclear to the developer. Take a look at the following example:</p> <pre><code>navigate(.reviews)
-</code></pre> <p>When the developer composes this code, the assumption is that it facilitates push navigation rather than unwinding. However, if the same function call is employed to execute an unwind operation exclusively in cases where the route already exists, it imposes an additional cognitive burden on the developer. Consequently, the developer is compelled to possess a more comprehensive understanding of the inner workings of the function before initiating its invocation.</p> <p>So, in the end it depends on your needs. If you have criteria to support unwinding routes then use the implementation above, on the other hand if you are just interested in normal push navigation then substitute <code>NavigationType</code> in navigate closure with Route.</p> <blockquote> <p>I am sure there are other ways of handling navigation in SwiftUI. Send me a <a href="https://gist.github.com/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Gist</a> of your suggestion on <a href="https://twitter.com/azamsharp" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Twitter</a> and I will be more than happy to review it.</p> </blockquote> <blockquote> <p>I also wrote a book on Navigation API in SwiftUI. If you are interested, you can download it free of charge from <a href="https://azamsharp.com/books" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">here</a>.</p> </blockquote> <h2 id="displaying-errors">Displaying Errors</h2> <p>Displaying errors is an integral part of any application. In SwiftUI we have many different ways of displaying errors. In this section, we will cover three different techniques that can be used to display errors.</p> <h3 id="technique-1">Technique #1:</h3> <p>This technique was demonstrated in Apple’s <a href="https://developer.apple.com/tutorials/app-dev-training/getting-started-with-scrumdinger" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Scrumdinger</a> application. We will start by creating an <code>ErrorWrapper</code>, which will be responsible for wrapping the actual error and also providing guidance to the user on the next steps. The implementation is shown below:</p> <pre><code>struct ErrorWrapper: Identifiable {
-		let id = UUID()
-		let error: Error
-		let guidance: String
-}
-</code></pre> <p>ErrorView is responsible for displaying the details of the error in a visual format. You can find basic implementation of an ErrorView below.</p> <pre><code>struct ErrorView: View {
-
-		let errorWrapper: ErrorWrapper
-
-		var body: some View {
-				VStack {
-						Text("Error has occured in the application.")
-								.font(.headline)
-								.padding([.bottom], 10)
-						Text(errorWrapper.error.localizedDescription)
-						Text(errorWrapper.guidance)
-								.font(.caption)
-				}.padding()
-		}
-}
-</code></pre> <blockquote> <p>ErrorView is simply a view and you can customize it as much as you want.</p> </blockquote> <p>The usage of <code>ErrorWrapper</code> and <code>ErrorView</code> is shown below:</p> <pre><code>struct HomeView: View {
-
-		@State private var errorWrapper: ErrorWrapper?
-
-		private enum SampleError: Error {
-				case operationFailed
-		}
-
-		var body: some View {
-				VStack {
-						Button("Throw Error") {
-								do {
-										throw SampleError.operationFailed
-								} catch {
-										errorWrapper = ErrorWrapper(error: error, guidance: "Operation failed. Please try again.")
-								}
-						}
-				}.sheet(item: $errorWrapper) { errorWrapper in
-						ErrorView(errorWrapper: errorWrapper)
-				}
-		}
-}
-</code></pre> <p>Now, when an error is thrown a sheet is presented with the details about the error along with the guidance for next steps.</p> <p>At present, when the intention is to present an error in a distinct view, the process necessitates the creation of an “errorWrapper” along with the attachment of a sheet to the corresponding view for the error’s visibility. But imagine a scenario where the display of errors could be consolidated into a centralized location.</p> <h3 id="technique-2">Technique #2:</h3> <p>Instead of attaching the sheet/alert to each screen of the application, we can attach it to the root view. This way we have a single place to handle, displaying of the errors. For this to work, we need global access to the errorWrapper so it can be set by any view. We will use the same technique we used in the <a href="https://azamsharp.com/2023/02/28/building-large-scale-apps-swiftui.html#navigation" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Navigation</a> section and use a custom <code>@Environment</code> value to manage global access. The implementation for the custom key and the extension is shown below:</p> <pre><code>struct ShowErrorEnvironmentKey: EnvironmentKey {
-		static var defaultValue: (Error, String) -&gt; Void = { _, _ in }
-}
-
-extension EnvironmentValues {
-		var showError: (Error, String) -&gt; Void {
-				get { self[ShowErrorEnvironmentKey.self] }
-				set { self[ShowErrorEnvironmentKey.self] = newValue }
-		}
-}
-</code></pre> <p>Now, we can use the <code>showError</code> Environment value in your view as implemented below:</p> <pre><code>struct HomeView: View {
-
-		@Environment(\.showError) private var showError
-
-		private enum SampleError: Error {
-				case operationFailed
-		}
-
-		var body: some View {
-				VStack {
-						Button("Throw Error") {
-								do {
-										throw SampleError.operationFailed
-								} catch {
-									 showError(error, "Please try again later.")
-								}
-						}
-				}
-		}
-}
-</code></pre> <p>Finally, will will attach the new Environment value to the root view of the application so it is easily accessible by all child views.</p> <pre><code>@main
-struct LearnApp: App {
-
-		@State private var errorWrapper: ErrorWrapper?
-
-		var body: some Scene {
-				WindowGroup {
-						ContentView()
-								.environment(\.showError) { error, guidance in
-										errorWrapper = ErrorWrapper(error: error, guidance: guidance)
-								}
-								.sheet(item: $errorWrapper) { errorWrapper in
-										Text(errorWrapper.error.localizedDescription)
-								}
-				}
-		}
-}
-</code></pre> <p>We have now centralized the displaying of errors for our application. In the future if you want to make any changes then there is a single place you can update.</p> <blockquote> <p>New displays like .alert, .toast etc can be added by introducing an enum to the ErrorWrapper. You can check out the implementation <a href="https://twitter.com/azamsharp/status/1695476201127645465?s=20" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">here</a>.</p> </blockquote> <h3 id="technique-3">Technique #3:</h3> <p>I learned about this technique from my discussion with <a href="https://www.linkedin.com/in/hussc/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Hussein EIRyalat</a>. He used custom view modifiers to display of errors. I have changed the implementation a little bit to support <code>ErrorWrapper</code>.</p> <p>The first step is to implement the view modifiers and view extensions. The implementation is shown below:</p> <pre><code>struct ErrorViewModifier: ViewModifier {
-
-		@Binding var errorWrapper: ErrorWrapper?
-
-		init(errorWrapper: Binding&lt;ErrorWrapper?&gt;) {
-				self._errorWrapper = errorWrapper
-		}
-
-		func body(content: Content) -&gt; some View {
-				content
-						.sheet(item: $errorWrapper) { errorWrapper in
-								Text(errorWrapper.error.localizedDescription)
-						}
-		}
-}
-
-extension View {
-
-		func onError(_ errorWrapper: Binding&lt;ErrorWrapper?&gt;) -&gt; some View {
-				modifier(ErrorViewModifier(errorWrapper: errorWrapper))
-		}
-}
-</code></pre> <p>Now, we can directly call <code>onError</code> as shown in the implementation below:</p> <pre><code>struct HomeView: View {
-
-		@State private var errorWrapper: ErrorWrapper?
-
-		private enum SampleError: Error {
-				case operationFailed
-		}
-
-		var body: some View {
-				VStack {
-						Button("Throw Error") {
-								do {
-										throw SampleError.operationFailed
-								} catch {
-										errorWrapper = ErrorWrapper(error: error, guidance: "Please try again.")
-								}
-						}
-				}.onError($errorWrapper)
-		}
-}
-</code></pre> <p>In this section, we covered three different ways of displaying errors in our SwiftUI application. Each approach has its own advantages and disadvantages. Try out different approaches and see which one fits your needs.</p> <h2 id="formatting">Formatting</h2> <p>It is common practice to format the data before presenting it to the user.</p> <p>When formatting data, it’s crucial to exercise caution with regard to the user’s present locale. Take a look at the following example.</p> <pre><code>struct HomeView: View {
-
-		let amount: Double = 25.75
-
-		var body: some View {
-				// displays $25.750000
-				Text("$\(amount)")
-		}
-}
-</code></pre> <p>There are few problems with the above implementation. The first one is pretty basic. Users don’t want to see <code>$25.750000</code> they want to see <code>$25.75</code>. But the much bigger issue is the hard-coded <code>$</code> sign. This means that the amount will only be displayed in US dollar currency. It would be a much better idea to set the currency based on user’s locale.</p> <p>The following implementation shows how to display currency correctly based on user’s locale.</p> <pre><code>extension Locale {
-		static var currencyCode: String {
-				Locale.current.currency?.identifier ?? "USD"
-		}
-}
-
-struct HomeView: View {
-
-		let amount: Double = 25.75
-
-		var body: some View {
-				// displays $25.75
-				Text(amount, format: .currency(code: Locale.currencyCode))
-		}
-}
-</code></pre> <p>Formatting in SwiftUI is not just limited to currency but you can format dates, measurements and even lists. This is shown below:</p> <p><strong>Formatting Dates:</strong></p> <p><img src="https://azamsharp.com/images/format-date.jpeg" alt="Date Formatting" loading="lazy"></p> <p><strong>Formatting Lists:</strong></p> <p><img src="https://azamsharp.com/images/format-lists.jpeg" alt="Format Lists" loading="lazy"></p> <p><strong>Formatting Distances</strong>:</p> <p>You don’t need to access locale from <code>@Environment</code>. This was just used to demonstrate that it converts distances automatically based on the locale.</p> <p><img src="https://azamsharp.com/images/format-distances.jpeg" alt="Format Distances" loading="lazy"></p> <p>So, the next you are trying to format your data to be displayed in a SwiftUI view make sure to check out the built-in formatters. There is a very good chance that SwiftUI already provides utility functions for your needs.</p> <h2 id="testing">Testing</h2> <blockquote> <p>This section of the article is taken from my post <a href="https://azamsharp.com/2012/12/23/pragmatic-unit-testing.html" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Pragmatic Testing and Avoiding Common Pitfalls</a></p> </blockquote> <p>The main purpose of writing tests is to make sure that the software works as expected. Tests also gives you confidence that a change you make in one module is not going to break stuff in the same or other modules.</p> <p>Not all applications requires writing tests. If you are building a basic application with a straight forward domain then you can test the complete app using manual testing. Having said that in most professional environments, you are working with a complicated domain with business rules. These business rules form the basis on which company operates and generates revenue.</p> <p>In this article, I will discuss different techniques of writing tests and how a developer can write good tests to get the most return on their investment.</p> <h2 id="not-all-tests-are-created-equal">Not all tests are created equal</h2> <p>Consider a scenario that you are writing an application for a bank. One of the business rules is to charge overdraft fees in case of insufficient funds. Banks generate <a href="https://www.depositaccounts.com/blog/banks-income-fees.html" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">billions of dollars income by just fees</a> alone. As a developer, you must write good quality tests to make sure that overdraft fee calculation works as expected.</p> <p>In the same bank app, you may have features like rendering templates for emails or logging certain interactions. These features are important but may not produce the same return on investment as compared to charging overdraft fees. This means if the email template is not in the correct format then the banks are not going to loose millions of dollars and you will not receive a call in the middle of the night. If the logging is meant for developers then in most cases you don’t even need to write tests for it. It is just an implementation detail.</p> <blockquote> <blockquote> <p>If you are building a logging framework then it is essential that you thoroughly test the public API exposed by your framework.</p> </blockquote> </blockquote> <p>Next time you are writing a test, ask yourself how important this feature is for the business. If it is an integral part of the business then make sure to test it thoroughly and go for high code coverage.</p> <h2 id="test-behavior-not-implementation">Test behavior not implementation</h2> <p>One of the biggest mistakes developers make is to focus on writing tests against the implementation details instead of the behavior of the application.</p> <blockquote> <blockquote> <p>A trigger to add a new test is the requirement, not a class or a function.</p> </blockquote> </blockquote> <p>Just because you added a new class or a function does not mean that you will start writing tests. That is just an implementation detail which can change overtime. Your tests should target the business requirements and not the implementation details.</p> <p>Here are few examples of behaviors, derived from business requirements:</p> <ol> <li>When a customer withdraw amount and has insufficient funds then charge an overdraft fee.</li> <li>The number of stocks specified by customer are submitted for trade at a specified price, once the limit has reached.</li> </ol> <p>The behavior stems from the requirement of the project. Tests that checks the implementation details instead of the behavior tends to be very brittle and can easily break when the implementation changes even though the behavior remains the same.</p> <p>Let’s consider a scenario, where you are building an application to display a list of products on the screen. The products are fetched from a JSON API and rendered using SwiftUI framework, following the principles of MVVM design pattern.</p> <p>First we will look at a common way of testing the above scenario that is adopted by most developers and then later we will implement tests in a more <strong>pragmatic</strong> way.</p> <p>The complete app might look like the implementation below:</p> <pre><code>class Webservice {
-
-		func fetchProducts() async throws -&gt; [Product] {
-				// ignore the hard-coded URL. We can inject the URL from using test configuration.
-				let url = URL(string: "https://test.store.com/api/v1/products")!
-				let (data, _) = try await URLSession.shared.data(from: url)
-				return try JSONDecoder().decode([Product].self, from: data)
-		}
-
-}
-
-class ProductListViewModel: ObservableObject {
-
-		@Published var products: [ProductViewModel] = []
-
-		func populateProducts() async {
-				do {
-						let products = try await Webservice().fetchProducts()
-						self.products = products.map(ProductViewModel.init)
-				} catch {
-						print(error)
-				}
-		}
-
-}
-
-struct ProductViewModel: Identifiable {
-
-		private let product: Product
-
-		init(product: Product) {
-				self.product = product
-		}
-
-		var id: Int {
-				product.id
-		}
-
-		var title: String {
-				product.title
-		}
-}
-
-
-struct ProductListScreen: View {
-
-		@StateObject private var vm = ProductListViewModel()
-
-		var body: some View {
-				List(vm.products) { product in
-						Text(product.title)
-				}.task {
-						await vm.populateProducts()
-				}
-		}
-}
-</code></pre> <p>The above application works as expected and produces the expected result. Instead of testing the concrete implementation of the <code>Webservice</code>, we will introduce an interface/contract/protocol just so that we can inject a mock. The sole purpose of creating the protocol is to satisfy the tests, even though there is only one concrete implementation that conforms to that protocol/interface.</p> <blockquote> <blockquote> <p>This is called <a href="https://dhh.dk/2014/test-induced-design-damage.html" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer"><strong>Test Induced Damage</strong></a>. The tests are dictating that we should add dependencies so you can mock out the service. The only purpose of introducing a protocol/contract/interface is so you can eventually mock it. Keep in mind there is nothing wrong with using protocols/contracts in your application. They do serve a very important purpose to hide the implementation details from the user and providing abstraction, but just to add contracts to satisfy testing goals in not a good practice as it complicates the implementation and your tests are directed away from testing the actual behavior of the app.</p> </blockquote> </blockquote> <p>In the code below we have introduced a WebserviceProtocol. Both Webservice and the newly created MockedWebservice conforms to the WebserviceProtocol as shown below:</p> <pre><code>protocol WebserviceProtocol {
-		func fetchProducts() async throws -&gt; [Product]
-}
-
-class Webservice: WebserviceProtocol {
-
-		func fetchProducts() async throws -&gt; [Product] {
-
-				let url = URL(string: "https://test.store.com/api/v1/products")!
-				let (data, _) = try await URLSession.shared.data(from: url)
-				return try JSONDecoder().decode([Product].self, from: data)
-		}
-}
-
-class MockedWebService: WebserviceProtocol {
-		func fetchProducts() async throws -&gt; [Product] {
-				return [Product(id: 1, title: "Product 1"), Product(id: 2, title: "Product 2")]
-		}
-}
-</code></pre> <blockquote> <blockquote> <p>You should probably use a better name, instead of calling it WebserviceProtocol. The main reason, I am calling it WebserviceProtocol is just for the sake of simplicity and convenience.</p> </blockquote> </blockquote> <p>The webservice is now injected as a dependency to our ProductListViewModel. This is shown below:</p> <pre><code>class ProductListViewModel: ObservableObject {
-
-		private let webservice: WebserviceProtocol
-		@Published var products: [ProductViewModel] = []
-
-		init(webservice: WebserviceProtocol) {
-				self.webservice = webservice
-		}
-
-		func populateProducts() async {
-				do {
-						let products = try await Webservice().fetchProducts()
-						self.products = products.map(ProductViewModel.init)
-				} catch {
-						print(error)
-				}
-		}
-
-}
-</code></pre> <p>The view, ProductListScreen is also updated to reflect the change.</p> <pre><code>struct ProductListScreen: View {
-
-		@StateObject private var vm = ProductListViewModel(webservice: WebserviceFactory.create())
-
-		var body: some View {
-				List(vm.products) { product in
-						Text(product.title)
-				}.task {
-						await vm.populateProducts()
-				}
-		}
-}
-</code></pre> <blockquote> <blockquote> <p>WebserviceFactory is responsible for either returning the Webservice or MockedWebservice, depending on the application environment.</p> </blockquote> </blockquote> <p>Now, let’s go ahead and check out the test.</p> <pre><code>final class ProductsTests: XCTestCase {
-
-		func test_populate_products() async throws {
-
-				let mockedWebService = MockedWebService()
-				let productListVM = ProductListViewModel(webservice: mockedWebService)
-
-				await productListVM.populateProducts()
-
-				// This line is verifying the implementation detail.
-				// Implementation details can change
-				// fetchProducts can change to getProducts and the test will fail.
-				verify(mockedWebService.fetchProducts()).wasCalled()
-
-				XCTAssertEqual(2, productListVM.products.count)
-		}
-}
-</code></pre> <p>We created an instance of <code>MockedWebservice</code> inside our test and pass it to the <code>ProductListViewModel</code>. Next, we invoke the <code>populateProducts</code> function on the view model and then check to make sure that the <code>fetchProducts</code> on the mockedWebservice instance was called. Finally, the test checks the products property of the ````ProductListViewModel``` instance to make sure that is is populated correctly.</p> <p>The problem with the above test is that it is not testing the behavior but the implementation. The following line of code is an implementation detail.</p> <pre><code>verify(mockedWebService.fetchProducts()).wasCalled()
-</code></pre> <p>This means if you decide to refactor your code and rename the function <code>fetchProducts</code> to <code>getProducts</code> then your test will fail. These kind of tests are often known as brittle tests as they break when the internal implementation changes even though the functionality/behavior provided by the API remains the same. This is also the main reason that your test should validate the behavior instead of the implementation.</p> <blockquote> <p>The code that you write is a liability, including tests. When writing tests, focus on the quality of the tests instead of the quantity. Remember, you are not only responsible for writing tests but also maintaining them.</p> </blockquote> <blockquote> <p>If you are using MVVM pattern then your VM may have logic. It is perfectly fine to write unit tests against the logic contained in the view model.</p> </blockquote> <h2 id="end-to-end-testing">End to End Testing</h2> <p>In the previous section, you learned that and mocking in most scenarios does not provide the return on your investment. Tests written that use mocking usually end up being too brittle and can fail because of refactoring, breaking all the dependent tests even though the behavior remained the same.</p> <p>Human psychology also plays an important role when writing tests. As software developers we want fast feedback with small amounts of dopamine hit along the way. There is nothing wrong with receiving fast feedback. Fast feedback is one of the important characteristics of a unit test. Unfortunately, sometimes we are going too fast to realize that we were on the wrong path. We start behaving like a test addict, who wants to see green checkmarks alongside the tests instantly.</p> <p>As explained earlier adding tests that test the implementation details instead of behavior does not provide any benefit to your project. It may even work against you in the long run since now you will be responsible for maintaining those test cases and anytime the implementation detail changes, all your test will break even though the functionality remained the same.</p> <blockquote> <p>I am not proposing that you should not write unit tests. Unit tests are great when you are testing small units of code. I am proposing that you must make sure that you are testing the behavior of the code and not implementation details. This means if you want to write unit tests for your view models, you can.</p> </blockquote> <p>Apart from unit tests and integration tests, end to end tests are best against regression. A good end to end will test one complete story/behavior. Below you can find the implementation of an end to end test.</p> <pre><code>final class ProductTests: XCTestCase {
-
-		private var webservice: Webservice!
-		// products
-		let products = [Product(id: 1, title: "Handmade Fresh Table"),Product(id: 2, title: "Durable Water Bottle")]
-
-		override func setUp() {
-				// make sure the Webservice is using the TEST server endpoints and not PRODUCTION
-				webservice = Webservice()
-
-				// add few products // seeding the database
-				for product in products {
-						await webservice.addProduct(product: product)
-				}
-		}
-
-		func test_display_list_of_all_products() async {
-
-				let app = XCUIApplication()
-				app.launch()
-
-				let productList = app.tables["productList"]
-
-				// check if the item numbers is correct
-				XCTAssertEqual(productList.tables.cells.count, 2)
-
-				// check if the correct items are displayed
-				for(index, product) in products.enumerated() {
-						let cell = productList.cells.element(boundBy: index)
-						XCTAssertEqual(cell.staticTexts["productTitle"].label, product.title)
-				}
-
-		}
-
-		override func tearDown() async throws {
-				// make sure to delete ALL records from the database so future test results are not influenced
-				await webservice.deleteProductById(productId: 1)
-				await webservice.deleteProductById(productId: 2)
-		}
-
-}
-</code></pre> <blockquote> <blockquote> <p>Developers can run E2E tests locally on their development machine. This will require initial setup such as testing framework, test environment, dependencies (database, services). E2E tests can be time-consuming, as a result developers may choose to run E2E tests less frequently than unit tests or other types of tests.</p> </blockquote> </blockquote> <p>E2E tests are slower than the previous tests discussed earlier in the section but the main reason they are slower is because they tests all layers of the application. E2E tests are complete test and targets a particular behavior of the app.</p> <p>End to end tests also requires some initial setup that will allow your test to run database migrations, insert seed data, simulate user interface events and then rolling back changes after the tests are completed.</p> <p>End to end tests are NOT replacement of your domain model tests. You MUST write tests against your domain models, specially if your app is domain heavy and consists of lots of business rules.</p> <blockquote> <blockquote> <p>You will have to find the right balance as to how often to run end to end tests. If you run it with each code check-in then your continuous integration server will always be running 100% of the time. If you run it once every couple of days then you will be notified of failures much later than expected. Keep in mind that you can run E2E tests locally on your machine. Once you get the desired outcome, the CI server can run all the tests during the code check-in process.</p> </blockquote> </blockquote> <h2 id="what-about-integration-testing">What about Integration Testing</h2> <p>Integration tests are performed to make sure that two different systems can work together. These systems can be external dependencies like database or API but it can also be different modules within the same system.</p> <p>Dependencies can be classified as managed and unmanaged dependencies. A managed dependency includes database, file systems etc. For managed dependencies, it is important that you use real instance and not a mock. Unmanaged dependencies include SMTP server, payment gateway etc. For unmanaged dependencies use mocks to verify their behavior.</p> <p>Let’s check out a sample integration test for a network service for user login operation.</p> <pre><code>// This test is generated by ChatGPT AI
-import XCTest
-
-class IntegrationTests: XCTestCase {
-		func testLogin() {
-				// Set up the URL for the login endpoint
-				let url = URL(string: "https://api.example.com/login")!
-
-				// Create a URL request
-				var request = URLRequest(url: url)
-				request.httpMethod = "POST"
-				request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-
-				// Set the body of the request to a JSON object with the login credentials
-				let body = ["username": "user123", "password": "password"]
-				request.httpBody = try! JSONSerialization.data(withJSONObject: body)
-
-				// Create a URLSession and send the request
-				let session = URLSession.shared
-				let task = session.dataTask(with: request) { data, response, error in
-						// Make sure there is no error
-						XCTAssertNil(error)
-
-						// Check the response status code
-						let httpResponse = response as! HTTPURLResponse
-						XCTAssertEqual(httpResponse.statusCode, 200)
-
-						// Check the response data
-						XCTAssertNotNil(data)
-						let responseBody = try! JSONSerialization.jsonObject(with: data!, options: []) as! [String: Any]
-						XCTAssertEqual(responseBody["status"], "success")
-				}
-				task.resume()
-		}
-}
-
-</code></pre> <p>The above integration test makes sure that the HTTP client layer is working as expected. The integration is between the network client and the server. The client is making sure that the response is correct and valid for a successful login operation.</p> <p>Unmanaged dependencies like payment gateway, SMTP clients etc can be mocked out during integration tests. For managed dependencies, use the concrete implementations.</p> <h2 id="code-coverage">Code Coverage</h2> <p>Code coverage is a metric that calculates how much of your code is covered under test. Let’s take a very simple example. In the code below we have a <code>BankAccount</code> class, which consists of <code>deposit</code> and <code>withdraw</code> functions.</p> <blockquote> <blockquote> <p>Keep in mind that in real world scenario, a bank account is not implemented as a calculator. A bank account is recorded in a ledger, where all financial transactions are persisted.</p> </blockquote> </blockquote> <pre><code>class BankAccount {
-
-		private(set) var balance: Double
-
-		init(balance: Double) {
-				self.balance = balance
-		}
-
-		func deposit(_ amount: Double) {
-				self.balance += amount
-		}
-
-		func withdraw(_ amount: Double) {
-				self.balance -= amount
-		}
-
-}
-</code></pre> <p>One possible test for the BankAccount may check if the account is successfully deposited.</p> <pre><code>final class BankAccountTests: XCTestCase {
-
-		func test_deposit_amount() {
-
-				let bankAccount = BankAccount(balance: 0)
-				bankAccount.deposit(100)
-				XCTAssertEqual(100, bankAccount.balance)
-
-		}
-}
-</code></pre> <p>If this is the only test we have in our test suite then our code coverage is not 100%. This means not all paths/functions are under test. This is true because we never implemented the test for <code>withraw</code> function.</p> <p>You may be wondering that should you always have 100% code coverage. The simple answer is NO. But it also depends on the apps that you are working on. If you are writing code for NASA, where it will be responsible for landing rover on Mars then you better make sure that every single line is tested and your code coverage is 100%.</p> <p>If you are implementing an app for a pace maker device that helps to regulate the heartbeat then you better make sure that your code coverage is 100%. One line of missed and untested code can result in someones life… literally.</p> <p>So, what is the ideal code coverage number. It really depends on the app but any number above 70% is considered a decent code coverage.</p> <blockquote> <blockquote> <p>When calculating code coverage make sure to ignore the third party libraries/frameworks as their code coverage is not your responsibility.</p> </blockquote> </blockquote> <h2 id="unit-testing-data-access-and-file-access">Unit Testing, Data Access and File Access</h2> <p>Most developers that I have talked to believe that a unit test cannot access a database or a file system. <strong>That is incorrect and plain wrong</strong>. A unit test CAN access a database or a file system.</p> <p>It is very important to understand that <code>Unit test is the isolation, not the thing under test</code>. This is so important that I am going to repeat it again.</p> <blockquote> <blockquote> <p>Unit test is the isolation, not the thing under test</p> </blockquote> </blockquote> <p>One of the valid reasons of not accessing a database or a file system during unit tests is that a test may leave data behind which may cause other tests to behave in unexpected manner. The solution is to make sure that the database is always reverted to an initial state after each test is completed so that future tests gets a clean database without any side effects.</p> <p>Some frameworks also allows you to construct in-memory databases. Core Data for instance uses SQLite by default but it can be configured to use an in-memory database as shown below:</p> <pre><code>storeDescription.type = NSInMemoryStoreType
-</code></pre> <p>In-memory database provides several benefits including:</p> <ul> <li>No removal of test data</li> <li>Run faster</li> <li>Can be initialized before each test run</li> </ul> <p>Even thought these benefits looks appealing, I personally do not recommend using in-memory database for testing purposes. The main reason is that in-memory databases does not represent an actual production environment. This means you may not encounter the same issues during tests, which you may witness when using an actual database.</p> <blockquote> <blockquote> <p>It is always a good idea to to make sure that your test environment and production environment are nearly identical in nature.</p> </blockquote> </blockquote> <h2 id="testing-view-model-does-not-validate-the-user-interface">Testing View Model Does NOT Validate the User Interface</h2> <p>Couple of weeks ago, I was having a discussion with another developer, who was mentioning that they test their <strong>user interface</strong> through View Models in SwiftUI. I was not sure what he meant so I checked the source code and found that they had lot of unit tests for their View Models and they were just assuming that if the View Model tests are passing then the user interface will automatically work.</p> <blockquote> <p>Please keep in mind that I am not suggesting that you should not write unit tests for your View Models. I am simply saying that your View Model unit tests does not validate that the user interface is working as expected.</p> </blockquote> <p>Let’s take a very simple example of building a counter application.</p> <pre><code>class CounterViewModel: ObservableObject {
-
-		@Published var count: Int = 0
-
-		func increment() {
-				count += 1
-		}
-}
-
-struct ContentView: View {
-
-		@StateObject private var counterVM = CounterViewModel()
-
-		var body: some View {
-				VStack {
-						Text("\(counterVM.count)")
-						Button("Increment") {
-								counterVM.increment()
-						}
-				}
-		}
-}
-</code></pre> <p>When the increment button is pressed, we call the increment function on the CounterViewModel instance and increment the count. Since count property is decorated with @Published property wrapper, it notifies the view to reevaluate and eventually rerender.</p> <p>In order to test that the count is incremented and displayed on the screen, the following unit test was written.</p> <pre><code>import XCTest
-@testable import Learn
-
-final class LearnTests: XCTestCase {
-
-		func test_user_updated_count() {
-				let vm = CounterViewModel()
-				vm.increment()
-				XCTAssertEqual(1, vm.count)
-		}
-
-}
-</code></pre> <p>This is a perfectly <strong>valid</strong> unit test but it does not verify that the count has been updated and displayed on the screen. Let me repeat it again. <strong>A View Model unit test does not verify that the count is successfully displayed on the screen. This is a unit test not a UI test.</strong></p> <p>To prove that a View Model unit test does not verify user interface elements, simply remove the Button view or even the Text view from the ContentView. The unit test will still pass. This can give you false confidence that your interface is working.</p> <p>A better way to verify that a user interface is working as expected is to implement a UI test. Take a look at the following implementation.</p> <pre><code>final class LearnUITests: XCTestCase {
-
-		func testExample() throws {
-				// UI tests must launch the application that they test.
-				let app = XCUIApplication()
-				app.launch()
-
-				app.buttons["incrementButton"].tap()
-				XCTAssertEqual("1", app.staticTexts["countLabel"].label)
-		}
-}
-</code></pre> <p>This test will launch the app in a simulator and verify that when the button is pressed, label is updated correctly.</p> <blockquote> <p>Depending on the complexity of the behavior you are testing, you may not even need to write a user interface test. I have found that most of the user interfaces can be tested quickly using Xcode Previews.</p> </blockquote> <p>So what is the right balance? How many unit tests should you have for your View Model as compared to UI tests.</p> <p>The answer is <strong>it depends</strong>. If you have complicated logic in your View Model then unit test can help. UITest (E2E) tests provide the best defense against regression. For each story, you can write couple of long happy path user interface tests and couple of edge cases. Once again, this really depends on the story and the complexities associated with the story.</p> <p>In the end <a href="https://azamsharp.com/2023/02/15/testing-is-about-confidence.html" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">testing is all about <strong>confidence</strong></a>. Sometimes you can gain confidence by writing fewer or no tests and other times you have to write more tests to achieve the level of confidence.</p> <h2 id="the-ideal-test">The Ideal test</h2> <p>We talked about several different types of tests. You may be wondering what is the best kind of test to write. What is the ideal test?</p> <p>Unfortunately, there is no ideal test. It all depends on your project and requirements. If your project is domain heavy then you should have more domain level tests. If your project is UI heavy then your should have end to end tests. Finally, if your project integrates with managed and unmanaged dependencies then integration tests will be more suitable in those scenarios.</p> <p>Remember to test the public API exposed by the module and not the implementation details. This way you can write useful quality tests, which will also help you to catch errors.</p> <p>Don’t create protocols/interfaces/contracts with the sole purpose of mocking. If a protocol consists of a single concrete implementation then use the concrete implementation and remove the interface/contract. Your architecture should be based on current business needs and not on what if scenarios that may never happen. Remember YAGNI (You aren’t going to need it). Less code is better than more code.</p> <h2 id="conclusion">Conclusion</h2> <p>Application architecture is a complicated subject and in the end the best architecture for a project depends on many factors. These factors can include the size and complexity of the project, the team’s skills and experience, the project’s goals and requirements.</p> <p>Ultimately, the key to a successful application architecture is to choose a pattern that fits the project’s unique needs, and to constantly evaluate and adjust the architecture as the project evolves.</p> <p>By investing time and resources into designing a thoughtful and effective application architecture, teams can ensure that their codebase is maintainable, scalable, and flexible enough to adapt to changing requirements and technology trends.</p>
-						</div>
+	<div class="articleTitle">
+		<h1><a href="https://milen.me/writings/appkit-vs-swiftui-stable-vs-shiny/">AppKit vs SwiftUI: Stable vs Shiny</a></h1>
+	</div>
+	<div class="articleDateline"><a href="https://milen.me/writings/appkit-vs-swiftui-stable-vs-shiny/">Aug 10, 2023 at 02:00</a></div>
+	<div class="externalLink"> <a href=""></a></div>
+	<div id="bodyContainer" class="articleBody smallText"><h2 id="appkit-vs-swiftui-the-question">AppKit vs SwiftUI: The Question</h2>
+<p>When writing a native macOS app, developers need to decide which UI framework
+to write new code in. AppKit, whose origins date back to 30yrs+ ago, feels
+like a dinosaur soon to be retired with the shiny SwiftUI waiting around
+corner to take over.</p>
+<h2 id="ghostty-vs-swiftui">Ghostty vs SwiftUI</h2>
+<p><a href="https://mitchellh.com/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Mitchell Hashimoto</a> has been working on a new
+cross-platform terminal written in Zig and <a href="https://mitchellh.com/writing/ghostty-devlog-002" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">posted a update</a>
+on the project’s progress. Notably, he talked about implementing non-native
+full-screen on macOS:</p>
+<blockquote>
+<p>There is a feature amongst other macOS terminal emulators that is commonly called “non-native fullscreen.”</p>
+<p>It turns out implementing this was a doozy. On the surface, it really is very
+simple: you programmatically modify some window attributes. If you Google around,
+the code samples to make this behavior happen are a <strong>dozen lines or so</strong>.
+But the <strong>Ghostty PR was +802/-239</strong>. What?</p>
+<p>If you’ve been following Ghostty, I very proudly talk about how Ghostty is
+written in Zig but uses SwiftUI for macOS GUI. Ghostty was 100% SwiftUI (for the GUI):
+the main entrypoint for Ghostty.app was a SwiftUI App object.
+The issue is that <strong>non-native fullscreen requires subclassing NSWindow and
+with SwiftUI you just can’t</strong> (or, nobody has publicly figured out how).</p>
+<p>So, in order to make non-native fullscreen work, we had to <strong>rip out the
+SwiftUI app</strong> and window lifecycle management and <strong>rewrite it ourselves using
+plain old AppKit</strong>.
+Note: we still use SwiftUI for the views, just not the window/app lifecycle management.</p>
+</blockquote>
+<p>And it turns out that non-native fullscreen was not the only issue:</p>
+<blockquote>
+<p>If we just wanted non-native fullscreen, this probably wouldn’t be worth it.
+But, we already had some other <strong>bugs or missing features looming because of SwiftUI</strong>
+and this gives us a path to fix all of them, so we decided it was worth it.</p>
+</blockquote>
+<p>So, usage of SwiftUI constrained the product to have bugs and missing features.
+But <em>why</em> are developers choosing to use SwiftUI if it’s the source of such problems?</p>
+<p>To answer that, let’s rewind back to June 2022.</p>
+<h2 id="wwdc-2022-the-swiftui-vision">WWDC 2022: The SwiftUI Vision</h2>
+<p>At the <a href="https://developer.apple.com/videos/play/wwdc2022/102/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Platforms State of the Union</a> session
+during WWDC 2022, Josh Shaffer set out the vision of the future platforms:</p>
+<blockquote>
+<p>The Objective-C language, AppKit and UIKit frameworks, and Interface Builder
+have empowered generations of developers. These technologies were built for
+each other and will continue to serve us  well for a long time to come.</p>
+<p><strong>But over time, new abstractions become necessary</strong>.</p>
+</blockquote>
+<p><img src="https://milen.me/images/writings/appkit-vs-swiftui-stable-vs-shiny/wwdc2022-102_objc_appkit_ib.jpg" alt="" loading="lazy"></p>
+<p>A bit later in the session, he clearly communicated the direction, so that
+developers know where to invest:</p>
+<blockquote>
+<p>The best way to build an app is with Swift and SwiftUI.</p>
+</blockquote>
+<p><img src="https://milen.me/images/writings/appkit-vs-swiftui-stable-vs-shiny/wwdc2022-102_swift_swiftui.jpg" alt="The best way to build an app is with Swift and SwiftUI" loading="lazy"></p>
+<p>Unfortunately, that might not be <em>quite</em> true on macOS.</p>
+<h3 id="vision-vs-reality">Vision vs Reality</h3>
+<p>It’s important to interpret WWDC statements within the context of the event.
+Long-term vision statements must to be ambitious &amp; unambigious and as a consequence,
+they might not match up present-day reality. The evidence certainly supports the
+hypothesis that SwiftUI is simply not a <em>complete</em> replacement of AppKit <em>today</em>.</p>
+<h2 id="swiftui-a-thousand-papercuts">SwiftUI: A Thousand Papercuts</h2>
+<p>The problems with SwiftUI have been
+<a href="https://mjtsai.com/blog/2023/05/30/swiftui-notes-before-wwdc-2023/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">thoroughly documented by Michael Tsai</a>,
+so I’ll include just a few examples.</p>
+<p><a href="https://telemetrydeck.com/blog/ios-open-source/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Daniel Jilg</a>:</p>
+<blockquote>
+<p>The app is also hard to develop because we seem to be fighting against a host of bugs and unclear behaviours in SwiftUI on macOS, even in the newest versions.</p>
+</blockquote>
+<p><a href="https://twitter.com/phillipcaudell/status/1572125644749959168" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Phillip Caudell</a></p>
+<blockquote>
+<p>Another day, another serious SwiftUI bug: List on macOS won’t select its initial value if the binding has an optional value type. Works on iOS, fails on macOS.</p>
+<p>I am deeply regretting my decision to use SwiftUI for Big Mail 2.</p>
+</blockquote>
+<p><a href="https://twitter.com/oskargroth/status/1688034005138956288" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Oskar Groth</a></p>
+<blockquote>
+<p>No macOS SwiftUI component has let me down as much as List. Just when you think you’ve got it working well, there is always some tiny issue relating to reorder, DisclosureGroup expansion, highlight or layout.</p>
+</blockquote>
+<p><a href="https://mastodon.social/@stroughtonsmith/110453960832638854" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Steve Troughton-Smith</a>:</p>
+<blockquote>
+<p>Every WWDC from here on in I’ll be looking at from the perspective of ‘can you make better apps with SwiftUI vs not-SwiftUI?’. The answer right now is ‘no’, not for the apps I want to build and the platforms I want to build them for, but boy would it sure be nice to say yes and start using more of AppKit in my cross-platform apps.</p>
+</blockquote>
+<h3 id="macos-major-versions">macOS Major Versions</h3>
+<p>It seems that SwiftUI is breaking behaviour across major version upgrades as well.
+<a href="https://mastodon.social/@stroughtonsmith" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Steve Troughton-Smith</a> on <a href="https://mjtsai.com/blog/2022/10/25/macos-13-0-ventura/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">macOS 13 Ventura breaking SwiftUI layouts</a>:</p>
+<blockquote>
+<p>Another version of macOS, another set of SwiftUI layout changes that break my UI in some way.</p>
+</blockquote>
+<p>And sometimes, you get important <a href="https://mjtsai.com/blog/2023/08/03/how-nshostingview-determines-its-sizing/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">bug fixes and features</a>
+which only available on the <em>latest</em> version:</p>
+<blockquote>
+<p>I couldn’t get my SwiftUI view to expand to fill up the entire superview that the <code>NSHostingView</code> was being added to.</p>
+<p>But, there’s just one problem… this property was introduced in macOS 13 and I’m still targeting macOS 12.</p>
+</blockquote>
+<h2 id="swiftui-case-studies">SwiftUI: Case Studies</h2>
+<p>Another set of data points are case studies of app rewrites and green
+frield projects. The experiences paint a consistent picture:
+SwiftUI accelerates parts of the workflow but it introduces non-trivial
+friction in others.</p>
+<h3 id="case-study-rewriting-remotion-in-swiftui">Case Study: Rewriting Remotion in SwiftUI</h3>
+<p><a href="https://mjtsai.com/blog/2023/05/30/rewriting-remotion-in-swiftui/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Rewriting Remotion in SwiftUI</a>:</p>
+<blockquote>
+<p>Development is faster, the app is more stable, and new teammates are ramping up faster thanks to the simpler code base.</p>
+<p>We now think: If you are a macOS or iOS developer who hasn’t yet taken the plunge yet, now is a great time to start writing a new app using almost exclusively SwiftUI, and use its friends Combine and concurrency for the data flow.</p>
+</blockquote>
+<blockquote>
+<p>While SwiftUI is all you’ll need for a <strong>basic Mac or iOS application</strong>,
+there are <strong>still quite a few gaps</strong> that will require you to partially make
+use of classic Cocoa views. In our code base, for example, we need some
+access to NSEvents, text input, and tweaking the first responder that
+just <strong>aren’t possible with pure SwiftUI</strong>.</p>
+</blockquote>
+<h3 id="case-study-wallaroo-and-swiftui-on-macos">Case Study: Wallaroo and SwiftUI on macOS</h3>
+<p><a href="https://mjtsai.com/blog/2023/05/26/wallaroo-and-swiftui-on-macos/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">Wallaroo and SwiftUI on macOS</a></p>
+<p>Counterintuitively, SwiftUI made hard things and easy things hard:</p>
+<blockquote>
+<p>I was expecting stuff like that to take a lot of effort to get working on the Mac. Instead, it ran 100% out of the box with no modifications at all.</p>
+<p>And the stuff that I was expecting to be easy, like a settings view, buttons, and menu commands, turned out to be hard.</p>
+</blockquote>
+<p>And a very common experience for developers targeting both iOS and macOS:</p>
+<blockquote>
+<p>You’re going to have platform-specific code. More than you realize: certainly more than I expected!</p>
+</blockquote>
+<h3 id="case-study-timingis">Case Study: timing.is</h3>
+<p><a href="https://mjtsai.com/blog/2023/01/27/swiftui-in-timing-app/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">SwiftUI in Timing.is App</a></p>
+<blockquote>
+<p>It took a few hours to fall in love with SwiftUI. So much so that we instantly decided to abandon a cross-platform codebase and go fully native on iOS.</p>
+<p>Despite the <strong>regular friction</strong>, we still loved it. Because like any commitment, you must let the majority rule. It was fun at least 51% of the time. But let’s talk about the &lt;= 49% that wasn’t.</p>
+</blockquote>
+<h2 id="appkit-maturity--stability">AppKit: Maturity &amp; Stability</h2>
+<p>AppKit is over 30yrs old, dating back to the early beginnings of NeXTSTEP. That’s
+a <em>very</em> long time to accumulate a set of APIs which been refined over a large variety
+of use cases. It’s almost certain that any particular feature can be implemented.
+On the other hand, it’s simply not possible to replace 30yrs+ of accumulated APIs
+in just 4yrs (SwiftUI was released in 2019).</p>
+<p>Because of its maturity, AppKit does not change often nor significantly: it provides
+a stable foundation to build upon. Desktop OS innovation is quite slow as resources
+are focused on mobile and spatial. In turn, this means lower likelihood of breaking
+changes on each major release and more time to focus on <em>your product</em>.</p>
+<h2 id="swiftui-solving-a-harder-problem">SwiftUI: Solving a Harder Problem</h2>
+<p>SwiftUI is tackling a <em>much</em> harder problem along multiple dimensions:</p>
+<ul>
+<li>
+<p><strong>Declarative</strong>: SwiftUI adopts a new declarative paradigm vs AppKit’s imperative.
+This requires changes to how solutions are expressed and how the APIs are designed.</p>
+</li>
+<li>
+<p><strong>Cross-platform</strong>: SwiftUI is designed to be cross-platform across Apple’s
+OSes. Cross-vendor cross-platforms frameworks suffer from a variety of
+problems but Apple has an advantage here: it controls the full stack across all
+environments. Nevertheless, designing a UI framework that can scale all the way
+from a watch to a Mac is a non-trivial undertaking.</p>
+</li>
+</ul>
+<h3 id="swiftui-a-rewrite">SwiftUI: A Rewrite</h3>
+<p>SwiftUI can be thought of as a unifying rewrite of AppKit and UIKit, so the usual
+rewriting caveats, risks and benefits apply.</p>
+<p>In this particular case, a major problem is that the developers doing
+the rewrite are <em>not</em> the same developers who created and evolved AppKit/UIKit.
+This means that a lot of institutional knowledge and context has been lost and
+would have to be re-invented.</p>
+<h2 id="uikit-mac-catalyst">UIKit (Mac Catalyst)</h2>
+<p>While using UIKit on macOS is another option, Apple sees UIKit the same way<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup> as
+AppKit: an API destined to be replaced by SwiftUI. This is not surprising
+at all, given that UIKit is an ancestor of AppKit, so shares the imperative nature
+and having been designed with Objective-C in mind.</p>
+<h2 id="conclusion-swiftui-on-macos">Conclusion: SwiftUI on macOS?</h2>
+<p>To make an informed decision about the UI framework, we need understand
+what’s driving the decision, what are the use cases and the priorities.</p>
+<p>For example, if a product is being built, the question needs to be answered from
+the perspective of what’s best for the customers. End-users do not care
+about which framework was to solve their problems. Not fighting a brand
+new framework will save a lot of time that can be spent focusing on the product itself.</p>
+<p>If you want to have some fun, play with a shiny new API or write an app in a new paradigm,
+then SwifUI is the clear winner here. You will gain important skills that
+you will be able to leverage in future.</p>
+<h3 id="macos-apprentice-by-sarah-reichelt">“macOS Apprentice” by Sarah Reichelt</h3>
+<p>In <a href="https://troz.net/post/2023/macos_book_2/" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">macOS Apprentice</a>, Sarah tries to answer
+the <a href="https://www.kodeco.com/books/macos-apprentice/v1.0/chapters/18-using-swiftui-in-appkit" rel="noopener noreferrer" target="_blank" referrerpolicy="no-referrer">same question</a>:</p>
+<blockquote>
+<p>To support old versions of macOS, use AppKit.</p>
+<p>For long-form text editing or for thousands of records, use AppKit.</p>
+<p>For existing AppKit apps, add SwiftUI gradually.</p>
+<p>For everything else, start with SwiftUI and include AppKit as needed.</p>
+</blockquote>
+<h3 id="final-words">Final Words</h3>
+<p>In summary, think <em>carefully</em> about your use-cases and pick the framework that
+allows you to deliver the user experience you desire.</p>
+<p>If you want to provide the <em>best user experience</em>, you might have to leverage the
+old and rusty AppKit, at least for a while longer. It’s always important to
+prioritise <em>what’s best for your customers</em> because in the long term,
+that’s in your best interest as well.</p>
+
+
+<ol>
+<li id="fn:1">
+<p>As evidenced by the slides from WWDC 2022.&nbsp;<a href="#fnref:1">↩︎</a></p>
+</li>
+</ol>
+
+</div>
 </article>
 
 
